@@ -58,12 +58,6 @@ class Hostel(BaseUnit):
     self_contained = models.BooleanField(default=False)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
-    class Meta: 
-        ordering = ['university']
-
-    def __str__(self): 
-        return self.university
-
 
 # ---------------------------------------------------------------------------
 # Images — one small model per unit type, each capped at 3 images.

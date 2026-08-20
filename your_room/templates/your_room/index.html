@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>YourRoom | Find the room in the right place</title>
+<meta name="description" content="Book hostels, rentals and airbnbs with confidence across Uganda." />
+<meta property="og:title" content="YourRoom | Find the room in the right place" />
+<meta property="og:description" content="Book hostels, rentals and airbnbs with confidence across Uganda." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="stylesheet" href="{% static 'your_room/styles.css' %}" />
+</head>
+<body>
+<main>
+  <section class="hero">
+    <div class="hero__bar">
+      <a class="logo logo--light" href="index.html"><b>Your</b><span>Room</span></a>
+      <nav class="nav">
+        <a href="{% url 'rentals' %}">Get A Room</a>
+        <a href="#contact">Contact us</a>
+      </nav>
+    </div>
+    <div class="hero__body">
+      <h1>Find the room in the right place.</h1>
+      <p>Book hostels, rentals and airbnbs with confidence</p>
+      <form class="searchbar" id="search-form">
+        <input id="search-input" type="text" placeholder="search by location, name of air bnb or rental..." />
+        <button type="submit">search</button>
+      </form>
+    </div>
+  </section>
+
+  <h2 class="section-title container">Get A Room</h2>
+  <div class="grid container">
+    <a class="card" href="hostels.html"><img src="{% static 'your_room/images/hostels.png' %}" alt="Hostels" /><h3>Hostels</h3></a>
+    <a class="card" href="rentals.html"><img src="{% static 'your_room/images/hero.png' %}" alt="Rentals" /><h3>Rentals</h3></a>
+    <a class="card" href="airbnb.html"><img src="{% static 'your_room/images/airbnb.jpg' %}" alt="Air bnb" /><h3>Air bnb</h3></a>
+  </div>
+
+  <h2 class="section-title container" id="contact">Contact Us</h2>
+  <section class="center container">
+    <p>For any inquiries or assistance in booking, get in touch with us through the following channels.</p>
+    <div class="channels">
+      <span class="channel"><img src="{% static 'your_room/images/phone.png' %}" alt="" /> number</span>
+      <span class="channel"><img src="{% static 'your_room/images/mail.png' %}" alt="" /> email@gmail.com</span>
+    </div>
+  </section>
+
+  <section class="center container">
+    <p>Share your feedback. We would love to hear from you.</p>
+    <form class="feedback" id="feedback-form">
+      <input required type="text" placeholder="Name" />
+      <input required type="text" placeholder="Feedback" />
+      <input required type="email" placeholder="email" />
+      <button class="btn btn--sm" type="submit">Submit</button>
+      <p class="form-note" id="feedback-note" hidden>Thank you for your feedback.</p>
+    </form>
+  </section>
+</main>
+<footer class="footer container">
+  <a class="logo" href="index.html"><b>Your</b><span>Room</span></a>
+  <div class="col">
+    <strong>Get a Room</strong>
+    <a href="rentals.html">Rentals</a>
+    <a href="hostels.html">Hostels</a>
+    <a href="airbnb.html">Air bnb</a>
+  </div>
+  <div class="col">
+    <strong>Contact us</strong>
+    <span>Whatsapp number</span>
+    <span>email@gmail.com</span>
+  </div>
+</footer>
+<script src="{% static 'your_room/script.js' %}"></script>
+</body>
+</html>

@@ -16,7 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from your_room.views import index, rental
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("", index, name="index"),
+    path("rentals/", rental, name = "rentals")
 ]

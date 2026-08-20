@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Unit details | YourRoom</title>
+<meta name="description" content="See photos, room type and price, then book the unit." />
+<meta property="og:title" content="Unit details | YourRoom" />
+<meta property="og:description" content="See photos, room type and price, then book the unit." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="stylesheet" href="{% static 'your_room/styles.css' %}" />
+</head>
+<body>
+<main>
+  <h1 class="page-title container">Name of the unit</h1>
+  <div class="gallery container">
+    <img src="{% static 'your_room/images/unit-gallery.png' %}" alt="Unit photo 1" />
+    <img src="{% static 'your_room/images/hero.png' %}" alt="Unit photo 2" />
+    <img src="{% static 'your_room/images/unit-gallery.png' %}" alt="Unit photo 3" />
+  </div>
+  <div class="meta container">
+    <div>single room</div>
+    <div>self contained</div>
+    <div>Price</div>
+  </div>
+  <div class="center-action"><button class="btn btn--lg" id="book-now" type="button">Book Now</button></div>
+</main>
+<footer class="footer container">
+  <a class="logo" href="index.html"><b>Your</b><span>Room</span></a>
+  <div class="col">
+    <strong>Get a Room</strong>
+    <a href="rentals.html">Rentals</a>
+    <a href="hostels.html">Hostels</a>
+    <a href="airbnb.html">Air bnb</a>
+  </div>
+  <div class="col">
+    <strong>Contact us</strong>
+    <span>Whatsapp number</span>
+    <span>email@gmail.com</span>
+  </div>
+</footer>
+<script src="{% static 'your_room/script.js' %}"></script>
+</body>
+</html>
