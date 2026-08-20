@@ -32,7 +32,7 @@ class BaseUnit(models.Model):
     # It also orders results by location
     class Meta: 
         abstract = True
-        ordering = ["-location"]
+        ordering = ["name"]
 
     # __str__ helps to print results of code as they are in strings
     #  but not as memory references. 
@@ -57,6 +57,12 @@ class Hostel(BaseUnit):
     room_type = models.CharField(max_length=10, choices=RoomType.choices)
     self_contained = models.BooleanField(default=False)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    class Meta: 
+        ordering = ['university']
+
+    def __str__(self): 
+        return self.university
 
 
 # ---------------------------------------------------------------------------
