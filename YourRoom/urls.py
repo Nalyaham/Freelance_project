@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from your_room.views import index, rental, rental_detail
+from your_room.views import index, rental, unit_detail
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -24,7 +24,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", index, name="index"),
     path("rentals/", rental, name = "rentals"),
-    path("rentals/<int:pk>/", rental_detail, name="rental-detail")
+    path("unit/<str:unit_type>/<int:pk>/", unit_detail, name="unit-detail")
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

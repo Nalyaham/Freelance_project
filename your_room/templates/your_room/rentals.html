@@ -49,7 +49,7 @@
         <p>{{ unit.get_room_type_display }}</p>
         <p>{{ unit.location }}</p>
         <div class="card__action">
-          <a class="btn btn--sm" href="{% url 'rental-detail' unit.pk %}">Details</a>
+          <a class="btn btn--sm" href="{% url 'unit-detail' 'rental' unit.pk %}">Details</a>
         </div>
       </article>
     {% empty %}

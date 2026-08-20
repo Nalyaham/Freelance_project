@@ -14,16 +14,27 @@
 </head>
 <body>
 <main>
-  <h1 class="page-title container">Name of the unit</h1>
+  <h1 class="page-title container">{{unit.name}}</h1>
   <div class="gallery container">
-    <img src="{% static 'your_room/images/unit-gallery.png' %}" alt="Unit photo 1" />
-    <img src="{% static 'your_room/images/hero.png' %}" alt="Unit photo 2" />
-    <img src="{% static 'your_room/images/unit-gallery.png' %}" alt="Unit photo 3" />
-  </div>
+    {% for img in unit.images.all %}
+    <img src="{{ img.image.url }}" alt="{{ unit.name }}" />
+    {% endfor %} 
+    </div>
   <div class="meta container">
-    <div>single room</div>
-    <div>self contained</div>
-    <div>Price</div>
+    {% if unit_type == 'rental' %}
+    <div>{{ unit.location }}</div>
+    <div>{% if unit.self_contained %} Self contained 
+      {% else %} Not self contained {% endif %}</div>
+    <div>{{ unit.price }}</div>
+    {% elif unit_type == 'hostel' %}
+    <div>{{ unit.univeristy }}</div>
+    <div>{% if unit.self_contained %} Self contained {% else %} Not self contained {% endif %}</div>
+    <div>{{ unit.price }}</div>
+    {% else %}
+    <div>{{ unit.name }}</div>
+    <div>{{ unit.location }}</div>
+    <div>{{ unit.price }}</div>
+    {% endif %}
   </div>
   <div class="center-action"><button class="btn btn--lg" id="book-now" type="button">Book Now</button></div>
 </main>
