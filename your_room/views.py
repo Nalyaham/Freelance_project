@@ -38,7 +38,25 @@ def unit_detail(request,unit_type, pk):
     return render(request, "your_room/detail.html", {"unit": unit, "unit_type": unit_type})
 
 def hostel(request):
-    return render(request, "your_room/hostels.html")
+    units = Hostel.objects.prefetch_related("images")
+
+    university = request.GET.get("university")
+    room_type = request.GET.get("room_type")
+    self_contained = request.GET.get("self_contained")
+
+    if university:
+        units = units.filter(university__icontains=university)
+    if room_type:
+        units = units.filter(room_type=room_type)
+    if self_contained in ("true", "false"):
+        units = units.filter(self_contained=(self_contained == "true"))
+
+    context = {
+        "units": units,
+        # feeds the location dropdown with whatever locations actually exist
+        "universities": Hostel.objects.values_list("university", flat=True).distinct(),
+    }
+    return render(request, "your_room/hostels.html", context)
 
 def airbnb(request):
     return render(request, "your_room/airbnb.html")

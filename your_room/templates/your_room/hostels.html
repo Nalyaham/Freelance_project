@@ -15,30 +15,45 @@
 <body>
 <main>
   <h1 class="page-title container">Hostels</h1>
-  <div class="filters container">
-    <button class="filter" type="button">Univeristy<img src="{% static 'your_room/images/arrow.png' %}" alt="" /></button>
-    <button class="filter" type="button">Self contained or not<img src="{% static 'your_room/images/arrow.png' %}" alt="" /></button>
-    <button class="filter" type="button">Single or double<img src="{% static 'your_room/images/arrow.png' %}" alt="" /></button>
-  </div>
+  <form class = "filters container", method = "get", id = "filter-form">
+    <select name = "university", class = "filter", onchange="document.getElementById('filter-form').submit()">
+      <option value = "">University</option>
+      {% for uni in universities %}
+      <option value = "{{ uni }}" {% if request.GET.location == uni %} selected {% endif %}>{{ uni }}</option>
+      {% endfor %}
+    </select>
+    <select name="room_type" class="filter" onchange="document.getElementById('filter-form').submit()">
+    <option value="">Single or double</option>
+    <option value="single" {% if request.GET.room_type == "single" %}selected{% endif %}>Single</option>
+    <option value="double" {% if request.GET.room_type == "double" %}selected{% endif %}>Double</option>
+  </select>
+
+  <select name="self_contained" class="filter" onchange="document.getElementById('filter-form').submit()">
+    <option value="">Self contained or not</option>
+    <option value="true" {% if request.GET.self_contained == "true" %}selected{% endif %}>Self contained</option>
+    <option value="false" {% if request.GET.self_contained == "false" %}selected{% endif %}>Not self contained</option>
+  </select>
+  </form>
   <div class="grid container">
-    <article class="card">
-      <img src="{% static 'your_room/images/hostels.png' %}" alt="University" loading="lazy" />
-      <h3>University</h3>
-      <p>Single room</p><p>Self contained</p>
-      <div class="card__action"><a class="btn btn--sm" href="detail.html">Details</a></div>
-    </article>
-    <article class="card">
-      <img src="{% static 'your_room/images/hostels.png' %}" alt="University" loading="lazy" />
-      <h3>University</h3>
-      <p>Single room</p><p>Self contained</p>
-      <div class="card__action"><a class="btn btn--sm" href="detail.html">Details</a></div>
-    </article>
-    <article class="card">
-      <img src="{% static 'your_room/images/hostels.png' %}" alt="University" loading="lazy" />
-      <h3>University</h3>
-      <p>Single room</p><p>Self contained</p>
-      <div class="card__action"><a class="btn btn--sm" href="{% url 'unit-detail' 'hostel' unit.pk %}">Details</a></div>
-    </article>
+   {% for unit in units %}
+      <article class="card">
+        {% with unit.images.first as img %}
+          {% if img %}
+            <img src="{{ img.image.url }}" alt="{{ unit.name }}" loading="lazy" />
+          {% else %}
+            <img src="{% static 'your_room/images/hero.png' %}" alt="{{ unit.name }}" loading="lazy" />
+          {% endif %}
+        {% endwith %}
+        <h3>{{ unit.university }}</h3>
+        <p>{{ unit.get_room_type_display }}</p>
+        <p>{% if unit.self_contained %} Self contained {% else %} Not self contained {% endif %}</p>
+        <div class="card__action">
+          <a class="btn btn--sm" href="{% url 'unit-detail' 'hostel' unit.pk %}">Details</a>
+        </div>
+      </article>
+    {% empty %}
+      <p>No rentals match those filters.</p>
+    {% endfor %}
   </div>
 </main>
 <footer class="footer container">
