@@ -37,7 +37,7 @@
       <img src="{% static 'your_room/images/hostels.png' %}" alt="University" loading="lazy" />
       <h3>University</h3>
       <p>Single room</p><p>Self contained</p>
-      <div class="card__action"><a class="btn btn--sm" href="detail.html">Details</a></div>
+      <div class="card__action"><a class="btn btn--sm" href="{% url 'unit-detail' 'hostel' unit.pk %}">Details</a></div>
     </article>
   </div>
 </main>
@@ -45,9 +45,9 @@
   <a class="logo" href="index.html"><b>Your</b><span>Room</span></a>
   <div class="col">
     <strong>Get a Room</strong>
-    <a href="rentals.html">Rentals</a>
-    <a href="hostels.html">Hostels</a>
-    <a href="airbnb.html">Air bnb</a>
+    <a href="{% url 'rentals' %}">Rentals</a>
+    <a href="{% url 'hostels' %}">Hostels</a>
+    <a href="{% url 'airbnb' %}">Air bnb</a>
   </div>
   <div class="col">
     <strong>Contact us</strong>

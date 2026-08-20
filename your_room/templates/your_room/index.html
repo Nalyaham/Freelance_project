@@ -18,7 +18,7 @@
     <div class="hero__bar">
       <a class="logo logo--light" href="index.html"><b>Your</b><span>Room</span></a>
       <nav class="nav">
-        <a href="{% url 'rentals' %}">Get A Room</a>
+        <a href="#get-a-room">Get A Room</a>
         <a href="#contact">Contact us</a>
       </nav>
     </div>
@@ -32,11 +32,11 @@
     </div>
   </section>
 
-  <h2 class="section-title container">Get A Room</h2>
+  <h2 class="section-title container" id = "get-a-room">Get A Room</h2>
   <div class="grid container">
-    <a class="card" href="hostels.html"><img src="{% static 'your_room/images/hostels.png' %}" alt="Hostels" /><h3>Hostels</h3></a>
-    <a class="card" href="rentals.html"><img src="{% static 'your_room/images/hero.png' %}" alt="Rentals" /><h3>Rentals</h3></a>
-    <a class="card" href="airbnb.html"><img src="{% static 'your_room/images/airbnb.jpg' %}" alt="Air bnb" /><h3>Air bnb</h3></a>
+    <a class="card" href="{% url 'hostels' %}"><img src="{% static 'your_room/images/hostels.png' %}" alt="Hostels" /><h3>Hostels</h3></a>
+    <a class="card" href="{% url 'rentals' %}"><img src="{% static 'your_room/images/hero.png' %}" alt="Rentals" /><h3>Rentals</h3></a>
+    <a class="card" href="{% url 'airbnb' %}"><img src="{% static 'your_room/images/airbnb.jpg' %}" alt="Air bnb" /><h3>Air bnb</h3></a>
   </div>
 
   <h2 class="section-title container" id="contact">Contact Us</h2>
@@ -63,9 +63,9 @@
   <a class="logo" href="index.html"><b>Your</b><span>Room</span></a>
   <div class="col">
     <strong>Get a Room</strong>
-    <a href="rentals.html">Rentals</a>
-    <a href="hostels.html">Hostels</a>
-    <a href="airbnb.html">Air bnb</a>
+    <a href="{% url 'rentals' %}">Rentals</a>
+    <a href="{% url 'hostels' %}">Hostels</a>
+    <a href="{% url 'airbnb' %}">Air bnb</a>
   </div>
   <div class="col">
     <strong>Contact us</strong>
