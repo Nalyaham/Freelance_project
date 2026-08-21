@@ -15,6 +15,21 @@
 <body>
 <main>
   <h1 class="page-title container">Air bnb</h1>
+  <form class = "filters container", method = "get", id = "filter-form">
+    <select name = "location", class = "filter", onchange="document.getElementById('filter-form').submit()">
+      <option value = "">Location</option>
+      {% for loc in locations %}
+      <option value = "{{ loc }}" {% if request.GET.location == loc %} selected {% endif %}>{{ loc }}</option>
+      {% endfor %}
+    </select>
+
+  <select name="price" class="filter" onchange="document.getElementById('filter-form').submit()">
+    <option value="">Price</option>
+    <option value="true" {% if request.GET.self_contained == "true" %}selected{% endif %}>Self contained</option>
+    <option value="false" {% if request.GET.self_contained == "false" %}selected{% endif %}>Not self contained</option>
+  </select>
+  </form>
+
   <div class="filters container">
     <button class="filter" type="button">Location<img src="{% static 'your_room/images/arrow.png' %}" alt="" /></button>
     <button class="filter" type="button">Name of air bnb<img src="{% static 'your_room/images/arrow.png' %}" alt="" /></button>

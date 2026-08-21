@@ -25,8 +25,12 @@
     <div class="hero__body">
       <h1>Find the room in the right place.</h1>
       <p>Book hostels, rentals and airbnbs with confidence</p>
-      <form class="searchbar" id="search-form">
-        <input id="search-input" type="text" placeholder="search by location, name of air bnb or rental..." />
+      <form class="searchbar" id="search-form" action = "{% url 'search' %}">
+        <select id="search-input"  placeholder="search by location, name of air bnb or rental..." name = 'location'>
+          {% for loc in locations %}
+          <option value = "{{ loc }}"> {{ loc }}</option>
+          {% endfor %}
+        </select>
         <button type="submit">search</button>
       </form>
     </div>
