@@ -78,22 +78,14 @@ class UnitImageBase(models.Model):
 class RentalImage(UnitImageBase):
     unit = models.ForeignKey(Rental, related_name="images", on_delete=models.CASCADE)
 
-    def clean(self):
-        if self.unit.images.exclude(pk=self.pk).count() >= 4:
-            raise ValidationError("A rental can have at most 3 images.")
-
+   
 
 class AirbnbImage(UnitImageBase):
     unit = models.ForeignKey(Airbnb, related_name="images", on_delete=models.CASCADE)
 
-    def clean(self):
-        if self.unit.images.exclude(pk=self.pk).count() >= 4:
-            raise ValidationError("An airbnb can have at most 3 images.")
-
+  
 
 class HostelImage(UnitImageBase):
     unit = models.ForeignKey(Hostel, related_name="images", on_delete=models.CASCADE)
 
-    def clean(self):
-        if self.unit.images.exclude(pk=self.pk).count() >= 4:
-            raise ValidationError("A hostel unit can have at most 3 images.")
+   

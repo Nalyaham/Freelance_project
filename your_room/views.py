@@ -71,7 +71,20 @@ def hostel(request):
     return render(request, "your_room/hostels.html", context)
 
 def airbnb(request):
-    return render(request, "your_room/airbnb.html")
+    units = Airbnb.objects.prefetch_related("images")
+
+    location = request.GET.get("location")
+    name = request.GET.get("name")
+
+    if location: 
+        units = units.filter(location__icontains = location)
+    if name: 
+        units = units.filter(name__icontains = name)
+
+    context = { "locations" : Airbnb.objects.values_list("location", flat=True).distinct(), 
+               "units": units}
+    
+    return render(request, "your_room/airbnb.html", context)
 
 # your_room/views.py
 
