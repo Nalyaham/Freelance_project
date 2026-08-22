@@ -1,15 +1,7 @@
 /* YourRoom | script.js */
 document.addEventListener("DOMContentLoaded", function () {
   // Hero search -> search results page
-  var searchForm = document.getElementById("search-form");
-  if (searchForm) {
-    searchForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var q = document.getElementById("search-input").value.trim();
-      window.location.href = "search.html?q=" + encodeURIComponent(q);
-    });
-  }
-
+ 
   // Feedback form
   var feedback = document.getElementById("feedback-form");
   if (feedback) {
@@ -41,5 +33,14 @@ document.addEventListener("DOMContentLoaded", function () {
     book.addEventListener("click", function () {
       alert("Thank you! We will contact you shortly to confirm your booking.");
     });
+  }
+});
+
+// This line of code helps to remove any bfcache. Any text in the search bar is removed
+// once the user returns to the page. 
+window.addEventListener("pageshow", function (event) {
+  var searchInput = document.getElementById("search-input");
+  if (searchInput && event.persisted) {
+    searchInput.value = "";
   }
 });

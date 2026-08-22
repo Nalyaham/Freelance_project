@@ -1,9 +1,24 @@
 
 from your_room.models import Rental, Hostel, Airbnb
 from django.shortcuts import render, get_object_or_404
+from django.db.models import Q
+
+UNIT_MODELS = { 'rental' : Rental, 
+               'hostel' : Hostel, 
+               'airbnb' : Airbnb}
+
 
 def index(request):
-    return render(request, "your_room/index.html")
+    rental_location = Rental.objects.values_list("location", flat=True).distinct()
+    airbnb_location = Airbnb.objects.values_list("location", flat=True).distinct()
+    university = Hostel.objects.values_list("university", flat=True).distinct()
+
+    context = { "rental_locations" :rental_location,
+               "airbnb_locations" : airbnb_location,
+                "universities" : university 
+                }
+
+    return render(request, "your_room/index.html", context)
 
 def rental(request):
     units = Rental.objects.prefetch_related("images")
@@ -26,9 +41,6 @@ def rental(request):
     }
     return render(request, "your_room/rentals.html", context)
 
-UNIT_MODELS = { 'rental' : Rental, 
-               'hostel' : Hostel, 
-               'airbnb' : Airbnb}
 
 # Unit_type is a parameter added to the link sending the request
 # If the link has a unit type equal to the model in the dictionary, detail will only display that list
@@ -60,3 +72,47 @@ def hostel(request):
 
 def airbnb(request):
     return render(request, "your_room/airbnb.html")
+
+# your_room/views.py
+
+from your_room.models import Rental, Hostel, Airbnb
+
+def search(request):
+    q = request.GET.get("q", "").strip()
+    words = q.split()
+
+    rentals = hostels = airbnbs = []
+
+    if words:
+        rental_filter = Q()
+        for word in words:
+            rental_filter &= (
+                Q(name__icontains=word)
+                | Q(location__icontains=word)
+            )
+        rentals = Rental.objects.filter(rental_filter).prefetch_related("images")
+
+        hostel_filter = Q()
+        for word in words:
+            hostel_filter &= (
+                Q(name__icontains=word)
+                | Q(university__icontains=word)
+                | Q(location__icontains=word)
+            )
+        hostels = Hostel.objects.filter(hostel_filter).prefetch_related("images")
+
+        airbnb_filter = Q()
+        for word in words:
+            airbnb_filter &= (
+                Q(name__icontains=word)
+                | Q(location__icontains=word)
+                | Q(description__icontains=word)
+            )
+        airbnbs = Airbnb.objects.filter(airbnb_filter).prefetch_related("images")
+
+    results = (
+        [{"unit": u, "type": "Rental"} for u in rentals]
+        + [{"unit": u, "type": "Hostel"} for u in hostels]
+        + [{"unit": u, "type": "Airbnb"} for u in airbnbs]
+    )
+    return render(request, "your_room/search.html", {"q": q, "results": results})
