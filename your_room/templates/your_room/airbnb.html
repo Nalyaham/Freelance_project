@@ -23,10 +23,10 @@
       {% endfor %}
     </select>
 
-  <select name="price" class="filter" onchange="document.getElementById('filter-form').submit()">
+  <select name="name", class="filter", onchange="document.getElementById('filter-form').submit()">
     <option value="">Name of airbnb</option>
-    {% for name in units.name %}
-    <option value="{{name}}">{{ name }}</option>
+    {% for name in names %}
+    <option value="{{ name }}"{% if request.GET.name == name %} selected {% endif %}>{{ name }}</option>
     {% endfor %}
   </select>
   </form>
@@ -42,7 +42,7 @@
       {% endwith %}
       <h3>{{ unit.name }}</h3>
       <p>{{ unit.location}}</p>
-      <div class="card__action"><a class="btn btn--sm" href="{% url 'detail' &}">Details</a></div>
+      <div class="card__action"><a class="btn btn--sm" href="{% url 'unit-detail' 'airbnb' unit.pk %}">Details</a></div>
     </article>
     {% endfor %}
   </div>

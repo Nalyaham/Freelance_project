@@ -82,6 +82,7 @@ def airbnb(request):
         units = units.filter(name__icontains = name)
 
     context = { "locations" : Airbnb.objects.values_list("location", flat=True).distinct(), 
+               "names" : Airbnb.objects.values_list("name", flat=True).distinct(),
                "units": units}
     
     return render(request, "your_room/airbnb.html", context)
