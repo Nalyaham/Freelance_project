@@ -25,7 +25,7 @@
           <img src="{% static 'your_room/images/hero.png' %}" alt="{{ item.unit.name }}" loading="lazy" />
         {% endif %}
       {% endwith %}
-      <h3>{{ item.type }}</h3>
+      <h3>{{ item.type|capfirst }}</h3>
       <p>{{ item.unit.name }}</p>
       <div class="card__action">
         <a class="btn btn--sm" href="{% url 'unit-detail' item.type item.unit.pk %}">Details</a>

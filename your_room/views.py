@@ -125,8 +125,8 @@ def search(request):
         airbnbs = Airbnb.objects.filter(airbnb_filter).prefetch_related("images")
 
     results = (
-        [{"unit": u, "type": "Rental"} for u in rentals]
-        + [{"unit": u, "type": "Hostel"} for u in hostels]
-        + [{"unit": u, "type": "Airbnb"} for u in airbnbs]
+        [{"unit": u, "type": "rental"} for u in rentals]
+        + [{"unit": u, "type": "hostel"} for u in hostels]
+        + [{"unit": u, "type": "airbnb"} for u in airbnbs]
     )
     return render(request, "your_room/search.html", {"q": q, "results": results})

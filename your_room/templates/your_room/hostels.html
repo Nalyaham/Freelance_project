@@ -19,7 +19,7 @@
     <select name = "university", class = "filter", onchange="document.getElementById('filter-form').submit()">
       <option value = "">University</option>
       {% for uni in universities %}
-      <option value = "{{ uni }}" {% if request.GET.location == uni %} selected {% endif %}>{{ uni }}</option>
+      <option value = "{{ uni }}" {% if request.GET.university == uni %} selected {% endif %}>{{ uni }}</option>
       {% endfor %}
     </select>
     <select name="room_type" class="filter" onchange="document.getElementById('filter-form').submit()">
