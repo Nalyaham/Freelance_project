@@ -45,7 +45,7 @@
           {% endif %}
         {% endwith %}
         <h3>{{ unit.university }}</h3>
-        <p>{{ unit.get_room_type_display }}</p>
+        <p>{{ unit.room_type|capfirst }}</p>
         <p>{% if unit.self_contained %} Self contained {% else %} Not self contained {% endif %}</p>
         <div class="card__action">
           <a class="btn btn--sm" href="{% url 'unit-detail' 'hostel' unit.pk %}">Details</a>
