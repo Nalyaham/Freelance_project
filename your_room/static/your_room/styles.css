@@ -95,6 +95,7 @@ a{color:inherit;text-decoration:none}
 
 /* ---------- Sections ---------- */
 h2.section-title{font-size:2.5rem;font-weight:400;padding-top:40px}
+h2.filter-title{font-size:1.25rem;font-weight:400; padding:40px 0px}
 h1.page-title{font-size:2.5rem;font-weight:400;padding-top:32px}
 
 .grid{display:grid;gap:32px;padding-block:32px}
@@ -123,6 +124,15 @@ h1.page-title{font-size:2.5rem;font-weight:400;padding-top:32px}
 }
 .filter:hover{background:var(--surface-gray)}
 .filter img{width:20px;height:20px}
+select.filter{
+  appearance:none;-webkit-appearance:none;-moz-appearance:none;
+  text-align:left;
+  background-image:url("images/arrow.png");
+  background-repeat:no-repeat;
+  background-position:right 14px center;
+  background-size:16px;
+  padding-right:40px;
+}
 
 /* ---------- Contact / feedback ---------- */
 .center{text-align:center;padding-block:32px}

@@ -15,21 +15,24 @@
 <body>
 <main>
   <h1 class="page-title container">Air bnb</h1>
-  <form class = "filters container", method = "get", id = "filter-form">
-    <select name = "location", class = "filter", onchange="document.getElementById('filter-form').submit()">
-      <option value = "">Location</option>
-      {% for loc in locations %}
-      <option value = "{{ loc }}" {% if request.GET.location == loc %} selected {% endif %}>{{ loc }}</option>
+  <div class = "filters container" >
+    <h2 class="filter-title container">Filter by:</h2>
+    <form class = "filters container", method = "get", id = "filter-form">
+      <select name = "location", class = "filter", onchange="document.getElementById('filter-form').submit()">
+        <option value = "">Location</option>
+        {% for loc in locations %}
+        <option value = "{{ loc }}" {% if request.GET.location == loc %} selected {% endif %}>{{ loc }}</option>
+        {% endfor %}
+      </select>
+
+    <select name="name", class="filter", onchange="document.getElementById('filter-form').submit()">
+      <option value="">Name of airbnb</option>
+      {% for name in names %}
+      <option value="{{ name }}"{% if request.GET.name == name %} selected {% endif %}>{{ name }}</option>
       {% endfor %}
     </select>
-
-  <select name="name", class="filter", onchange="document.getElementById('filter-form').submit()">
-    <option value="">Name of airbnb</option>
-    {% for name in names %}
-    <option value="{{ name }}"{% if request.GET.name == name %} selected {% endif %}>{{ name }}</option>
-    {% endfor %}
-  </select>
-  </form>
+    </form>
+  </div>
   <div class="grid container">
     {% for unit in units %}
     <article class="card">
