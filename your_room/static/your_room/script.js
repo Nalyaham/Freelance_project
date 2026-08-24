@@ -1,6 +1,29 @@
 /* YourRoom | script.js */
 document.addEventListener("DOMContentLoaded", function () {
-  // Hero search -> search results page
+    var navToggle = document.getElementById("nav-toggle");
+  var navMenu = document.getElementById("nav-menu");
+  var navClose = document.getElementById("nav-close");
+
+  if (navToggle && navMenu) {
+    navToggle.addEventListener("click", function () {
+      var isOpen = navMenu.classList.toggle("is-open");
+      navToggle.setAttribute("aria-expanded", isOpen);
+    });
+  }
+  if (navClose && navMenu && navToggle) {
+    navClose.addEventListener("click", function () {
+      navMenu.classList.remove("is-open");
+      navToggle.setAttribute("aria-expanded", "false");
+    });
+  }
+  if (navMenu && navToggle) {
+    navMenu.querySelectorAll("a").forEach(function (link) {
+      link.addEventListener("click", function () {
+        navMenu.classList.remove("is-open");
+        navToggle.setAttribute("aria-expanded", "false");
+      });
+    });
+  }
  
   // Feedback form
   var feedback = document.getElementById("feedback-form");
