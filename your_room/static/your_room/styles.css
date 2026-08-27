@@ -22,7 +22,7 @@ a{color:inherit;text-decoration:none}
 .container{padding-inline:16px}
 @media(min-width:768px){.container{padding-inline:48px}}
 
-/* ---------- Hero ---------- */
+/* ---------- Hero --------- */
 .hero{
   position:relative;margin:12px;border-radius:var(--radius);
   min-height:336px;display:flex;flex-direction:column;

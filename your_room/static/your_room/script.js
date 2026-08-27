@@ -54,7 +54,44 @@ document.addEventListener("DOMContentLoaded", function () {
   var book = document.getElementById("book-now");
   if (book) {
     book.addEventListener("click", function () {
-      alert("Thank you! We will contact you shortly to confirm your booking.");
+      var name = prompt("Full name for the booking:");
+      if (!name) return;
+      var phone = prompt("Mobile money phone number (e.g. +2567XXXXXXXX):");
+      if (!phone) return;
+// This line below reads the value of the unit_type and primary key in the button
+      var unitType = book.dataset.unitType;
+      var unitId = book.dataset.unitId;
+      var csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+
+      book.disabled = true;
+      book.textContent = "Processing...";
+
+      // This line creates a form for the data of name and phone obtained from the user
+      var formData = new FormData();
+      formData.append("name", name);
+      formData.append("phone_number", phone);
+
+      fetch("/book/" + unitType + "/" + unitId + "/", {
+        method: "POST",
+        headers: { "X-CSRFToken": csrfToken },
+        body: formData,
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data.status === "success") {
+            alert("Payment successful! Booking confirmed. Transaction: " + data.transaction_id);
+          } else {
+            alert("Payment failed or was not approved. Please try again.");
+          }
+        })
+        .catch(function (err) {
+          console.error(err);
+          alert("Something went wrong. Please try again.");
+        })
+        .finally(function () {
+          book.disabled = false;
+          book.textContent = "Book Now";
+        });
     });
   }
 });

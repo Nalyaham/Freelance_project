@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -117,6 +118,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
+# This setup enables Render to find the static files responsible for the design of the html
 STATIC_URL = "/static/"
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
@@ -129,3 +131,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR
+
+NYLONPAY_API_KEY = os.environ.get("NYLONPAY_API_KEY")
+NYLONPAY_API_SECRET = os.environ.get("NYLONPAY_API_SECRET")
