@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.conf import settings
 import uuid
 from nylonpay import create_nylon_pay
+from nylonpay import SdkException
 
 UNIT_MODELS = { 'rental' : Rental, 
                'hostel' : Hostel, 
@@ -137,27 +138,39 @@ def search(request):
 
 nylonpay = create_nylon_pay(
     api_key=settings.NYLONPAY_API_KEY,
-    api_secret=settings.NYLONPAY_API_SECRET,
+    api_secret=settings.NYLONPAY_API_SECRET
 )
 
 def book_now(request, unit_type, pk):
     if request.method != "POST":
         return JsonResponse({"status": "error", "message": "Invalid method"}, status=405)
 
+# From here the view collects information of the model being bought and the number making the purchase. 
     model = UNIT_MODELS.get(unit_type)
-    unit = get_object_or_404(model, pk=pk)
+    unit = get_object_or_404(model, pk=pk) # This line gets the unit
     name = request.POST.get("name")
     phone = request.POST.get("phone_number")
 
-    payment = nylonpay.collect_payment(
-        amount=int(unit.price),
-        currency="UGX",
-        customer={"name": name, "phone_number": phone},
-        description=f"Booking: {unit.name}",
-        reference=str(uuid.uuid4()),
-    )
+    try:
+        payment = nylonpay.collect_payment(
+            amount= int(unit.price),
+            currency="UGX",
+            customer={"name": name, "phone_number": phone},
+            description= f"Booking: {unit.name}",
+            reference=str(uuid.uuid4())
+        )
+    except SdkException as e:
+        print(f"Category: {e.category}")
+        print(f"Retryable: {e.retryable}")
+        print(f"Message: {e}")
+
     result = payment.wait()
 
-    if result:
+    print("RESULT:", result)
+    print("PAYMENT STATUS:", payment.status)
+    print("PAYMENT REFERENCE:", payment.reference)
+
+    if result is not None:
         return JsonResponse({"status": "success", "transaction_id": result.id})
-    return JsonResponse({"status": "failed"})
+    else:
+        return JsonResponse({"status": "failed"})
