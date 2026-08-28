@@ -151,18 +151,14 @@ def book_now(request, unit_type, pk):
     name = request.POST.get("name")
     phone = request.POST.get("phone_number")
 
-    try:
-        payment = nylonpay.collect_payment(
+    payment = nylonpay.collect_payment(
             amount= int(unit.price),
             currency="UGX",
             customer={"name": name, "phone_number": phone},
             description= f"Booking: {unit.name}",
             reference=str(uuid.uuid4())
         )
-    except SdkException as e:
-        print(f"Category: {e.category}")
-        print(f"Retryable: {e.retryable}")
-        print(f"Message: {e}")
+    
 
     result = payment.wait()
 
