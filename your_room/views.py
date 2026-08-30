@@ -7,6 +7,10 @@ from django.conf import settings
 import uuid
 from nylonpay import create_nylon_pay
 from nylonpay import SdkException
+import json
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.core.cache import cache
 
 UNIT_MODELS = { 'rental' : Rental, 
                'hostel' : Hostel, 
@@ -151,6 +155,7 @@ def book_now(request, unit_type, pk):
     name = request.POST.get("name")
     phone = request.POST.get("phone_number")
 
+    \
     payment = nylonpay.collect_payment(
             amount= int(unit.price),
             currency="UGX",
@@ -168,5 +173,48 @@ def book_now(request, unit_type, pk):
 
     if result is not None:
         return JsonResponse({"status": "success", "transaction_id": result.id})
-    else:
+    elif result is None:
         return JsonResponse({"status": "failed"})
+
+
+@csrf_exempt
+def nylonpay_webhook(request):
+    if request.method != "POST":
+        return HttpResponse(status=405)
+
+    raw_body = request.body  # must verify the raw bytes, not parsed JSON
+    signature = request.headers.get("x-nylon-signature", "")
+
+    is_valid = nylonpay.verify_webhook_signature(
+        payload=raw_body,
+        signature=signature,
+        secret=settings.NYLONPAY_WEBHOOK_SECRET,
+    )
+    if not is_valid:
+        return HttpResponse("Invalid signature", status=401)
+
+    body = json.loads(raw_body)
+    delivery_id = body["delivery_id"]
+    event = body["event"]
+    payload = body["payload"]
+
+    # Delivery guarantee: at-least-once, so dedupe on delivery_id
+    if cache.get(f"processed:{delivery_id}"):
+        return HttpResponse("OK", status=200)
+
+    reference = payload["reference"]
+
+    if event == "transaction.successful":
+        # TODO: mark the booking with this reference as confirmed
+        pass
+    elif event in ("transaction.failed", "transaction.cancelled"):
+        # TODO: mark booking failed; payload["failureReason"] has the human-readable reason
+        pass
+    elif event == "transaction.processing":
+        # TODO: mark booking as processing
+        pass
+
+    cache.set(f"processed:{delivery_id}", True, timeout=86400)
+
+    # Best practice: return 2xx immediately, process asynchronously if slow
+    return HttpResponse("OK", status=200)

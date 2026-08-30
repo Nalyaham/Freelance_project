@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
       book.disabled = true;
       book.textContent = "Processing...";
 
-      // This line creates a form for the data of name and phone obtained from the user
+// This line creates a form for the data of name and phone obtained from the user
       var formData = new FormData();
       formData.append("name", name);
       formData.append("phone_number", phone);
