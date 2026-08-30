@@ -165,16 +165,7 @@ def book_now(request, unit_type, pk):
         )
     
 
-    result = payment.wait()
-
-    print("RESULT:", result)
-    print("PAYMENT STATUS:", payment.status)
-    print("PAYMENT REFERENCE:", payment.reference)
-
-    if result is not None:
-        return JsonResponse({"status": "success", "transaction_id": result.id})
-    elif result is None:
-        return JsonResponse({"status": "failed"})
+    return JsonResponse({"status": "pending", "reference": payment.reference})
 
 
 @csrf_exempt

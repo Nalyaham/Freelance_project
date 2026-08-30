@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from your_room.views import index, rental, unit_detail, hostel, airbnb, search, book_now
+from your_room.views import index, rental, unit_detail, hostel, airbnb, search, book_now,nylonpay_webhook
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -28,7 +28,9 @@ urlpatterns = [
     path("hostels/", hostel, name = "hostels"), 
     path("airbnb/", airbnb, name = "airbnb"), 
     path("search/", search, name = "search"),
-    path("book/<str:unit_type>/<int:pk>/", book_now, name="book-now")
+    path("book/<str:unit_type>/<int:pk>/", book_now, name="book-now"),
+    # urls.py
+path("webhooks/nylonpay/", nylonpay_webhook, name="nylonpay-webhook"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

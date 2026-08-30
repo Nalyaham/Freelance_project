@@ -78,10 +78,10 @@ document.addEventListener("DOMContentLoaded", function () {
       })
         .then(function (res) { return res.json(); })
         .then(function (data) {
-          if (data.status === "success") {
-            alert("Payment successful! Booking confirmed. Transaction: " + data.transaction_id);
+          if (data.status === "pending") {
+            alert("Payment request sent! Check your phone to approve. We'll confirm your booking shortly.");
           } else {
-            alert("Payment failed or was not approved. Please try again.");
+            alert("Something went wrong starting the payment.");
           }
         })
         .catch(function (err) {
