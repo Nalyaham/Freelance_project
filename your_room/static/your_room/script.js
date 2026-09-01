@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
       })
         .then(function (res) { return res.json(); })
         .then(function (data) {
-          if (data.status === "pending") {
+          if (data.status === "pending"|| data.status === "processing") {
             alert("Payment request sent! Check your phone to approve. We'll confirm your booking shortly.");
           } else {
             alert("Something went wrong starting the payment.");

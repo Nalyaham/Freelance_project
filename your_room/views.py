@@ -11,6 +11,10 @@ import json
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.cache import cache
+from fastapi import FastAPI, Request, Response
+from nylonpay import create_nylon_pay
+import json
+import os
 
 UNIT_MODELS = { 'rental' : Rental, 
                'hostel' : Hostel, 
@@ -155,16 +159,15 @@ def book_now(request, unit_type, pk):
     name = request.POST.get("name")
     phone = request.POST.get("phone_number")
 
-    \
+    
     payment = nylonpay.collect_payment(
-            amount= int(unit.price),
+            amount= 5000,
             currency="UGX",
             customer={"name": name, "phone_number": phone},
             description= f"Booking: {unit.name}",
             reference=str(uuid.uuid4())
         )
-    
-
+    print("PAYMENT CREATED — reference:", payment.reference, "| status:", payment.status)
     return JsonResponse({"status": "pending", "reference": payment.reference})
 
 
@@ -196,16 +199,16 @@ def nylonpay_webhook(request):
     reference = payload["reference"]
 
     if event == "transaction.successful":
-        # TODO: mark the booking with this reference as confirmed
-        pass
+        fulfill_order(reference)
     elif event in ("transaction.failed", "transaction.cancelled"):
-        # TODO: mark booking failed; payload["failureReason"] has the human-readable reason
-        pass
+        notify_customer(reference, payload["failureReason"])
+
     elif event == "transaction.processing":
-        # TODO: mark booking as processing
-        pass
+        update_order_status(payload["reference"], "processing")
 
     cache.set(f"processed:{delivery_id}", True, timeout=86400)
 
+    print("WEBHOOK EVENT:", event)
+    print("WEBHOOK PAYLOAD:", payload)  
     # Best practice: return 2xx immediately, process asynchronously if slow
     return HttpResponse("OK", status=200)
