@@ -122,9 +122,8 @@ h1.page-title{font-size:clamp(1.375rem, 4vw, 2rem);font-weight:400;padding-top:3
   display:inline-block;border:1px solid var(--border);border-radius:var(--radius);
   background:transparent;font:inherit;cursor:pointer;transition:background-color .15s ease;
 }
-.btn:hover{background:var(--surface-gray)}
-.btn--sm{padding:8px 24px;font-size:1.2rem}
-.btn--lg{padding:12px 40px;font-size:1.2rem}
+.btn--sm{padding:8px 24px;font-size:1.2rem; background:var(--accent-orange)}
+.btn--lg{padding:12px 40px;font-size:1.2rem; background:var(--accent-orange)}
 
 /* ---------- Filters ---------- */
 .filters{display:flex;flex-wrap:wrap;gap:16px;padding-block:24px}
