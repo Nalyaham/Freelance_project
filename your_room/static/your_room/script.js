@@ -44,6 +44,11 @@ if (feedback) {
         if (data.status === "success") {
           feedback.reset();
           document.getElementById("feedback-note").hidden = false;
+          
+          // This line is used to set the time of the message which goes off after 4 secs
+          setTimeout(function () {
+            note.hidden = true;
+          }, 4000);
         } else {
           alert(data.message || "Something went wrong. Please try again.");
         }

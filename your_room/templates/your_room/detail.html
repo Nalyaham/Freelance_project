@@ -25,15 +25,15 @@
     <div>{{ unit.location }}</div>
     <div>{% if unit.self_contained %} Self contained 
       {% else %} Not self contained {% endif %}</div>
-    <div>{{ unit.price }}</div>
+    <div>{{ unit.price }} UGX</div>
     {% elif unit_type == 'hostel' %}
     <div>{{ unit.university }}</div>
     <div>{{ unit.room_type|capfirst }}</div>
     <div>{% if unit.self_contained %} Self contained {% else %} Not self contained {% endif %}</div>
-    <div>{{ unit.price }}</div>
+    <div>{{ unit.price }} UGX</div>
     {% else %}
     <div>{{ unit.location }}</div>
-    <div>{{ unit.price }}</div>
+    <div>{{ unit.price }} UGX</div>
     {% endif %}
   </div>
   <div class="center-action"><button class="btn btn--lg" id="book-now" type="button">Book Now</button></div>
