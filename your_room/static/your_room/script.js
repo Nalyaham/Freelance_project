@@ -26,14 +26,39 @@ document.addEventListener("DOMContentLoaded", function () {
   }
  
   // Feedback form
-  var feedback = document.getElementById("feedback-form");
-  if (feedback) {
-    feedback.addEventListener("submit", function (e) {
-      e.preventDefault();
-      feedback.reset();
-      document.getElementById("feedback-note").hidden = false;
-    });
-  }
+var feedback = document.getElementById("feedback-form");
+if (feedback) {
+  feedback.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    var csrfToken = feedback.querySelector("[name=csrfmiddlewaretoken]").value;
+    var formData = new FormData(feedback);
+
+    fetch("/feedback/", {
+      method: "POST",
+      headers: { "X-CSRFToken": csrfToken },
+      body: formData,
+    })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (data.status === "success") {
+          feedback.reset();
+          document.getElementById("feedback-note").hidden = false;
+          
+          // This line is used to set the time of the message which goes off after 4 secs
+          setTimeout(function () {
+            note.hidden = true;
+          }, 4000);
+        } else {
+          alert(data.message || "Something went wrong. Please try again.");
+        }
+      })
+      .catch(function (err) {
+        console.error(err);
+        alert("Something went wrong. Please try again.");
+      });
+  });
+}
 
   // Show the search term on the results page
   var term = document.getElementById("search-term");

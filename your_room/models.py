@@ -88,4 +88,17 @@ class AirbnbImage(UnitImageBase):
 class HostelImage(UnitImageBase):
     unit = models.ForeignKey(Hostel, related_name="images", on_delete=models.CASCADE)
 
+# Feedback Model
+class Feedback(models.Model):
+    name = models.CharField(max_length=150)
+    email = models.EmailField()
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.name} ({self.created_at:%Y-%m-%d})"
+
    
