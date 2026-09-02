@@ -3,6 +3,7 @@ from your_room.models import Rental, Hostel, Airbnb, Feedback
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 import json
+from django.http import JsonResponse, HttpResponse
 
 UNIT_MODELS = { 'rental' : Rental, 
                'hostel' : Hostel, 
