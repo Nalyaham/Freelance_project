@@ -1,7 +1,8 @@
 
-from your_room.models import Rental, Hostel, Airbnb
+from your_room.models import Rental, Hostel, Airbnb, Feedback
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
+import json
 
 UNIT_MODELS = { 'rental' : Rental, 
                'hostel' : Hostel, 
@@ -130,3 +131,19 @@ def search(request):
         + [{"unit": u, "type": "airbnb"} for u in airbnbs]
     )
     return render(request, "your_room/search.html", {"q": q, "results": results})
+
+# Feedback view. This recieves the information from the user and saves it on the database.
+
+def submit_feedback(request):
+    if request.method != "POST":
+        return JsonResponse({"status": "error", "message": "Invalid method"}, status=405)
+
+    name = request.POST.get("name", "").strip()
+    email = request.POST.get("email", "").strip()
+    message = request.POST.get("message", "").strip()
+
+    if not name or not email or not message:
+        return JsonResponse({"status": "error", "message": "All fields are required."}, status=400)
+
+    Feedback.objects.create(name=name, email=email, message=message)
+    return JsonResponse({"status": "success"})
