@@ -2,6 +2,19 @@
 from your_room.models import Rental, Hostel, Airbnb, Feedback
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
+from django.http import JsonResponse
+from django.conf import settings
+import uuid
+from nylonpay import create_nylon_pay
+from nylonpay import SdkException
+import json
+from django.http import JsonResponse, HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.core.cache import cache
+from fastapi import FastAPI, Request, Response
+from nylonpay import create_nylon_pay
+import json
+import os
 import json
 from django.http import JsonResponse, HttpResponse
 
@@ -132,6 +145,77 @@ def search(request):
         + [{"unit": u, "type": "airbnb"} for u in airbnbs]
     )
     return render(request, "your_room/search.html", {"q": q, "results": results})
+
+nylonpay = create_nylon_pay(
+    api_key=settings.NYLONPAY_API_KEY,
+    api_secret=settings.NYLONPAY_API_SECRET
+)
+
+def book_now(request, unit_type, pk):
+    if request.method != "POST":
+        return JsonResponse({"status": "error", "message": "Invalid method"}, status=405)
+
+# From here the view collects information of the model being bought and the number making the purchase. 
+    model = UNIT_MODELS.get(unit_type)
+    unit = get_object_or_404(model, pk=pk) # This line gets the unit
+    name = request.POST.get("name")
+    phone = request.POST.get("phone_number")
+
+    
+    payment = nylonpay.collect_payment(
+            amount= int(unit.price),
+            currency="UGX",
+            customer={"name": name, "phone_number": phone},
+            description= f"Booking: {unit.name}",
+            reference=str(uuid.uuid4())
+        )
+    print("PAYMENT CREATED — reference:", payment.reference, "| status:", payment.status)
+    return JsonResponse({"status": "pending", "reference": payment.reference})
+
+
+@csrf_exempt
+def nylonpay_webhook(request):
+    if request.method != "POST":
+        return HttpResponse(status=405)
+
+    raw_body = request.body  # must verify the raw bytes, not parsed JSON
+    signature = request.headers.get("x-nylon-signature", "")
+
+    is_valid = nylonpay.verify_webhook_signature(
+        payload=raw_body,
+        signature=signature,
+        secret=settings.NYLONPAY_WEBHOOK_SECRET,
+    )
+    if not is_valid:
+        return HttpResponse("Invalid signature", status=401)
+
+    body = json.loads(raw_body)
+    delivery_id = body["delivery_id"]
+    event = body["event"]
+    payload = body["payload"]
+
+    # Delivery guarantee: at-least-once, so dedupe on delivery_id
+    if cache.get(f"processed:{delivery_id}"):
+        return HttpResponse("OK", status=200)
+
+    reference = payload["reference"]
+
+    if event == "transaction.successful":
+        print(f"Booking {reference} confirmed!")
+    # TODO: mark booking as confirmed in your database
+    elif event in ("transaction.failed", "transaction.cancelled"):
+        print(f"Booking {reference} failed: {payload.get('failureReason')}")
+    # TODO: mark booking as failed
+    elif event == "transaction.processing":
+        print(f"Booking {reference} is processing")
+    # TODO: mark booking as processing
+
+    cache.set(f"processed:{delivery_id}", True, timeout=86400)
+
+    print("WEBHOOK EVENT:", event)
+    print("WEBHOOK PAYLOAD:", payload)  
+    # Best practice: return 2xx immediately, process asynchronously if slow
+    return HttpResponse("OK", status=200)
 
 # Feedback view. This recieves the information from the user and saves it on the database.
 

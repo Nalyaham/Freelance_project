@@ -11,9 +11,12 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / "secrets.env")
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,7 +28,7 @@ SECRET_KEY = "django-insecure-4#g#s0#wr$^11s=+0le261dcfjq*z6emq8m7ywwj)*b&*epyh0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['yourroom.onrender.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['yourroom.onrender.com', 'localhost', '127.0.0.1', 'unbutton-excess-laborious.ngrok-free.dev']
 
 
 # Application definition
@@ -118,6 +121,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
+# This setup enables Render to find the static files responsible for the design of the html
 STATIC_URL = "/static/"
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
@@ -130,3 +134,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR
+
+NYLONPAY_API_KEY = os.environ.get("NYLONPAY_API_KEY")
+NYLONPAY_API_SECRET = os.environ.get("NYLONPAY_API_SECRET")
+NYLONPAY_WEBHOOK_SECRET =os.environ.get("NYLONPAY_WEBHOOK_SECRET")
