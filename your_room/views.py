@@ -11,7 +11,6 @@ import json
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.cache import cache
-from fastapi import FastAPI, Request, Response
 from nylonpay import create_nylon_pay
 import json
 import os
