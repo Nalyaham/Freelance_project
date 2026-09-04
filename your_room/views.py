@@ -161,7 +161,7 @@ def book_now(request, unit_type, pk):
 
     
     payment = nylonpay.collect_payment(
-            amount= 5000,
+            amount= int(unit.price),
             currency="UGX",
             customer={"name": name, "phone_number": phone},
             description= f"Booking: {unit.name}",
@@ -199,12 +199,14 @@ def nylonpay_webhook(request):
     reference = payload["reference"]
 
     if event == "transaction.successful":
-        fulfill_order(reference)
+        print(f"Booking {reference} confirmed!")
+    # TODO: mark booking as confirmed in your database
     elif event in ("transaction.failed", "transaction.cancelled"):
-        notify_customer(reference, payload["failureReason"])
-
+        print(f"Booking {reference} failed: {payload.get('failureReason')}")
+    # TODO: mark booking as failed
     elif event == "transaction.processing":
-        update_order_status(payload["reference"], "processing")
+        print(f"Booking {reference} is processing")
+    # TODO: mark booking as processing
 
     cache.set(f"processed:{delivery_id}", True, timeout=86400)
 
