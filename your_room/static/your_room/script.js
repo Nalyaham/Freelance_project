@@ -132,9 +132,7 @@ if (feedback) {
             }
             // "pending"/"processing" → keep polling, no action needed
           });
-      }, 3000); // every 3 seconds
-
-      setTimeout(function () { clearInterval(interval); }, 300000); // stop after 5 min
+      }, 3000); // every 3 seconds// stop after 5 min
     }
   });
 

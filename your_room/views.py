@@ -160,7 +160,7 @@ def book_now(request, unit_type, pk):
     unit = get_object_or_404(model, pk=pk) # This line gets the unit
     name = request.POST.get("name")
     phone = request.POST.get("phone_number")
-    reference = secrets.token_hex(7) 
+    reference = str(uuid.uuid4()) 
 
 # The reference of the item being booked is saved here inthe DB
     booking = Booking.objects.create(
