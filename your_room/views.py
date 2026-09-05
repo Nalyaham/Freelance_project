@@ -180,6 +180,12 @@ def nylonpay_webhook(request):
     raw_body = request.body  # must verify the raw bytes, not parsed JSON
     signature = request.headers.get("x-nylon-signature", "")
 
+    secret = settings.NYLONPAY_WEBHOOK_SECRET
+    print("DEBUG secret loaded:", (secret[:6] + "...") if secret else "MISSING/None")
+    print("DEBUG secret length:", len(secret) if secret else 0)
+    print("DEBUG signature received:", signature)
+    print("DEBUG raw body:", raw_body)
+    
     is_valid = nylonpay.verify_webhook_signature(
         payload=raw_body,
         signature=signature,

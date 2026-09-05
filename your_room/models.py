@@ -101,4 +101,25 @@ class Feedback(models.Model):
     def __str__(self):
         return f"{self.name} ({self.created_at:%Y-%m-%d})"
 
+class Booking(models.Model):
+    STATUS_CHOICES = [
+        ("pending", "Pending"),
+        ("processing", "Processing"),
+        ("successful", "Successful"),
+        ("failed", "Failed"),
+        ("cancelled", "Cancelled"),
+    ]
+    unit_type = models.CharField(max_length=20)
+    unit_id = models.PositiveIntegerField()
+    name = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=20)
+    reference = models.CharField(max_length=100, unique=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    failure_reason = models.CharField(max_length=255, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.unit_type} #{self.unit_id} — {self.reference} ({self.status})"
+
    
