@@ -57,6 +57,8 @@ if (feedback) {
         console.error(err);
         alert("Something went wrong. Please try again.");
       });
+
+    
   });
 }
 
@@ -103,23 +105,40 @@ if (feedback) {
       })
         .then(function (res) { return res.json(); })
         .then(function (data) {
-          if (data.status === "pending"|| data.status === "processing") {
-            alert("Payment request sent! Check your phone to approve. We'll confirm your booking shortly.");
-          } else {
-            alert("Something went wrong starting the payment.");
+          if (data.status === "error") {
+            alert(data.message || "Something went wrong.");
+            book.disabled = false;
+            book.textContent = "Book Now";
+            return;
           }
-        })
-        .catch(function (err) {
-          console.error(err);
-          alert("Something went wrong. Please try again.");
-        })
-        .finally(function () {
-          book.disabled = false;
-          book.textContent = "Book Now";
-        });
-    });
-  }
-});
+          alert("Payment request sent! Check your phone to approve.");
+          pollBookingStatus(data.reference);
+          });
+        function pollBookingStatus(reference) {
+      var interval = setInterval(function () {
+        fetch("/booking-status/" + reference + "/")
+          .then(function (res) { return res.json(); })
+          .then(function (data) {
+            if (data.status === "successful") {
+              clearInterval(interval);
+              alert("Booking confirmed! 🎉");
+              book.disabled = false;
+              book.textContent = "Book Now";
+            } else if (data.status === "failed" || data.status === "cancelled") {
+              clearInterval(interval);
+              alert("Payment " + data.status + (data.failure_reason ? ": " + data.failure_reason : ""));
+              book.disabled = false;
+              book.textContent = "Book Now";
+            }
+            // "pending"/"processing" → keep polling, no action needed
+          });
+      }, 3000); // every 3 seconds
+
+      setTimeout(function () { clearInterval(interval); }, 300000); // stop after 5 min
+    }
+  });
+
+
 
 // This line of code helps to remove any bfcache. Any text in the search bar is removed
 // once the user returns to the page. 
@@ -127,5 +146,7 @@ window.addEventListener("pageshow", function (event) {
   var searchInput = document.getElementById("search-input");
   if (searchInput && event.persisted) {
     searchInput.value = "";
+  }
+});
   }
 });
