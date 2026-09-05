@@ -219,21 +219,30 @@ def nylonpay_webhook(request):
 
     reference = payload["reference"]
 
+    try: 
+        booking = Booking.objects.get(reference=reference)
+    except Booking.DoesNotExist:
+        cache.set(f"processed:{delivery_id}", True, timeout=86400)
+        return HttpResponse("OK", status=200)
+    
     if event == "transaction.successful":
-        print(f"Booking {reference} confirmed!")
-    # TODO: mark booking as confirmed in your database
-    elif event in ("transaction.failed", "transaction.cancelled"):
-        print(f"Booking {reference} failed: {payload.get('failureReason')}")
-    # TODO: mark booking as failed
+        booking.status = "successful"
+        booking.save(update_fields=["status"])
+
+    elif event in ("transaction.failed"):
+        booking.status = "failed"
+        booking.failure_reason = payload.get("failureReason")
+        booking.save(update_fields=["status", "failure_reason"])
+
+    elif event in ("transaction.cancelled"):
+        booking.status = "cancelled"
+        booking.save(update_fields=["status"])
+
     elif event == "transaction.processing":
-        print(f"Booking {reference} is processing")
-    # TODO: mark booking as processing
+        booking.status = "processing"
+        booking.save(update_fields=["status"])
 
     cache.set(f"processed:{delivery_id}", True, timeout=86400)
-
-    print("WEBHOOK EVENT:", event)
-    print("WEBHOOK PAYLOAD:", payload)  
-    # Best practice: return 2xx immediately, process asynchronously if slow
     return HttpResponse("OK", status=200)
 
 # Feedback view. This recieves the information from the user and saves it on the database.
