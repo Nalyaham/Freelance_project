@@ -1,5 +1,5 @@
 
-from your_room.models import Rental, Hostel, Airbnb, Feedback
+from your_room.models import Rental, Hostel, Airbnb, Feedback, Booking
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from django.http import JsonResponse
@@ -16,6 +16,7 @@ import json
 import os
 import json
 from django.http import JsonResponse, HttpResponse
+import secrets
 
 UNIT_MODELS = { 'rental' : Rental, 
                'hostel' : Hostel, 
@@ -159,17 +160,30 @@ def book_now(request, unit_type, pk):
     unit = get_object_or_404(model, pk=pk) # This line gets the unit
     name = request.POST.get("name")
     phone = request.POST.get("phone_number")
+    reference = secrets.token_hex(7) 
 
-    
-    payment = nylonpay.collect_payment(
-            amount= int(unit.price),
-            currency="UGX",
-            customer={"name": name, "phone_number": phone},
-            description= f"Booking: {unit.name}",
-            reference=str(uuid.uuid4())
-        )
-    print("PAYMENT CREATED — reference:", payment.reference, "| status:", payment.status)
-    return JsonResponse({"status": "pending", "reference": payment.reference})
+# The reference of the item being booked is saved here inthe DB
+    booking = Booking.objects.create(
+        unit_type=unit_type, unit_id=unit.pk,
+        name=name, phone_number=phone, reference=reference,
+    )
+
+# The payement is collected at this point with from the browser
+    try:
+        payment = nylonpay.collect_payment(
+                amount= int(unit.price),
+                currency="UGX",
+                customer={"name": name, "phone_number": phone},
+                description= f"Booking: {unit.name}",
+                reference=reference
+            )
+    except SdkException as e:
+        booking.status = "failed"
+        booking.failure_reason = str(e)
+        booking.save(update_fields=["status", "failure_reason"])
+        return JsonResponse({"status": "error", "message": str(e)}, status=400)
+
+    return JsonResponse({"status": booking.status, "reference": payment.reference})
 
 
 @csrf_exempt
@@ -185,7 +199,7 @@ def nylonpay_webhook(request):
     print("DEBUG secret length:", len(secret) if secret else 0)
     print("DEBUG signature received:", signature)
     print("DEBUG raw body:", raw_body)
-    
+
     is_valid = nylonpay.verify_webhook_signature(
         payload=raw_body,
         signature=signature,
