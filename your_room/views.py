@@ -262,6 +262,6 @@ def submit_feedback(request):
     return JsonResponse({"status": "success"})
 
 # This view is used to provide information of the transaction of the reference provided in the request.
-def booking_status(request, reference):
+def booking_status_page(request, reference):
     booking = get_object_or_404(Booking, reference=reference)
-    return JsonResponse({"status": booking.status, "failure_reason": booking.failure_reason})
+    return render(request, "your_room/booking_status.html", {"booking": booking})
