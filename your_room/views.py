@@ -229,12 +229,12 @@ def nylonpay_webhook(request):
         booking.status = "successful"
         booking.save(update_fields=["status"])
 
-    elif event in ("transaction.failed"):
+    elif event in "transaction.failed":
         booking.status = "failed"
         booking.failure_reason = payload.get("failureReason")
         booking.save(update_fields=["status", "failure_reason"])
 
-    elif event in ("transaction.cancelled"):
+    elif event in "transaction.cancelled":
         booking.status = "cancelled"
         booking.save(update_fields=["status"])
 

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Booking status | YourRoom</title>
+<link rel="stylesheet" href="{% static 'your_room/styles.css' %}" />
+</head>
+<body>
+<main>
+  <h1 class="page-title container">Booking Status</h1>
+
+  <section class="center container">
+    {% if booking.status == "successful" %}
+      <h2 class="section-title">✅ Booking Confirmed</h2>
+      <p>Your payment went through — {{ booking.unit_type|capfirst }} is booked.</p>
+    {% elif booking.status == "failed" %}
+      <h2 class="section-title">❌ Payment Failed</h2>
+      <p>{{ booking.failure_reason|default:"The payment could not be completed." }}</p>
+    {% elif booking.status == "cancelled" %}
+      <h2 class="section-title">🚫 Payment Cancelled</h2>
+      <p>No amount was charged.</p>
+    {% else %}
+      <h2 class="section-title">⏳ Processing…</h2>
+      <p>Check your phone to approve the payment.</p>
+    {% endif %}
+  </section>
+
+  <div class="meta container">
+    <div><strong>Reference:</strong> {{ booking.reference }}</div>
+    <div><strong>Name:</strong> {{ booking.name }}</div>
+    <div><strong>Phone:</strong> {{ booking.phone_number }}</div>
+    <div><strong>Status:</strong> {{ booking.status|capfirst }}</div>
+  </div>
+
+  <div class="center-action">
+    <a href="{% url 'index' %}" class="btn btn--sm">Back to YourRoom</a>
+  </div>
+</main>
+
+<footer class="footer container">
+  <a class="logo" href="{% url 'index' %}"><b>Your</b><span>Room</span></a>
+  <div class="col">
+    <strong>Get a Room</strong>
+    <a href="{% url 'rentals' %}">Rentals</a>
+    <a href="{% url 'hostels' %}">Hostels</a>
+    <a href="{% url 'airbnb' %}">Air bnb</a>
+  </div>
+  <div class="col">
+    <strong>Contact us</strong>
+    <span>Whatsapp number</span>
+    <span>email@gmail.com</span>
+  </div>
+</footer>
+
+{% if booking.status == "pending" or booking.status == "processing" %}
+<script>
+  setTimeout(function () { window.location.reload(); }, 5000);
+</script>
+{% endif %}
+</body>
+</html>
