@@ -159,7 +159,7 @@ def book_now(request, unit_type, pk):
     unit = get_object_or_404(model, pk=pk)
     name = request.POST.get("name", "").strip()
     phone = request.POST.get("phone_number", "").strip()
-    reference = secrets.token_hex(7)
+    reference = str(uuid.uuid4())
 
     booking = {
         "unit_type": unit_type,
@@ -187,6 +187,8 @@ def book_now(request, unit_type, pk):
         tx = result.value
         booking["status"] = tx.status
         booking["reference"] = tx.reference
+        if tx.status == "failed":
+            booking["failure_reason"] = tx.failure_reason
     else:
         booking["failure_reason"] = result.error
 
