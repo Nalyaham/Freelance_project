@@ -65,7 +65,7 @@ def unit_detail(request,unit_type, pk):
     return render(request, "your_room/detail.html", {"unit": unit, "unit_type": unit_type})
 
 def hostel(request):
-    units = Hostel.objects.prefetch_related("images")
+    units = Hostel.objects.filter(is_booked=False).prefetch_related("images")
 
     university = request.GET.get("university")
     room_type = request.GET.get("room_type")
@@ -128,7 +128,7 @@ def search(request):
                 | Q(university__icontains=word)
                 | Q(location__icontains=word)
             )
-        hostels = Hostel.objects.filter(hostel_filter).prefetch_related("images")
+        hostels = Hostel.objects.filter(hostel_filter, is_booked=False).prefetch_related("images")
 
         airbnb_filter = Q()
         for word in words:
@@ -189,6 +189,9 @@ def book_now(request, unit_type, pk):
         booking["reference"] = tx.reference
         if tx.status == "failed":
             booking["failure_reason"] = tx.failure_reason
+        elif tx.status == "successful" and unit_type == "hostel":
+            unit.is_booked = True
+            unit.save(update_fields=["is_booked"])
     else:
         booking["failure_reason"] = result.error
 
