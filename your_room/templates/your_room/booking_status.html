@@ -19,12 +19,12 @@
       </div>
       <div class="meta container">
         <div><strong>Reference:</strong> {{ booking.reference }}</div>
-        <div><strong>Name:</strong> {{ booking.name }}</div>
+        <div><strong>Name:</strong> {{ booking.name|capfirst }}</div>
         <div><strong>Phone:</strong> {{ booking.phone_number }}</div>
       </div>
       <div class="center container">
         <h2 class="section-title container">Contact of {{booking.unit_type|capfirst}}</h3>
-        <p> {{lessor.name}} </p>
+        <p> {{lessor.name|capfirst}} </p>
         <p> {{lessor.phone_number}} <br>
           <b>
           Please copy and call this number in order to book your room. </b>
@@ -32,23 +32,29 @@
 
       </div>
     {% elif booking.status == "failed" %}
-      <h2 class="section-title">❌ Payment Failed</h2>
-      {% if booking.failure_reason == "Payment failed" %}
-      <p>"The payment could not be completed."</p>
-      {% else %}
-      <p>{{ booking.failure_reason|default:"The payment could not be completed." }}</p>
-      {% endif %}
+      <div class="center container">
+        <h2 class="section-title">❌ Payment Failed</h2>
+        {% if booking.failure_reason == "Payment failed" %}
+        <p>"The payment could not be completed."</p>
+        {% else %}
+        <p>{{ booking.failure_reason|capfirst }}</p>
+        {% endif %}
+      </div>
+
       <div class="meta container">
         <div><strong>Reference:</strong> {{ booking.reference }}</div>
-        <div><strong>Name:</strong> {{ booking.name }}</div>
+        <div><strong>Name:</strong> {{ booking.name|capfirst }}</div>
         <div><strong>Phone:</strong> {{ booking.phone_number }}</div>
       </div>
     {% elif booking.status == "cancelled" %}
-      <h2 class="section-title">🚫 Payment Cancelled</h2>
-      <p>No amount was charged.</p>
+      <div class="center container">
+        <h2 class="section-title">🚫 Payment Cancelled</h2>
+        <p>No amount was charged.</p>
+      </div>
+      
       <div class="meta container">
         <div><strong>Reference:</strong> {{ booking.reference }}</div>
-        <div><strong>Name:</strong> {{ booking.name }}</div>
+        <div><strong>Name:</strong> {{ booking.name|capfirst }}</div>
         <div><strong>Phone:</strong> {{ booking.phone_number }}</div>
       </div>
     {% else %}
