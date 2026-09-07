@@ -195,66 +195,6 @@ def book_now(request, unit_type, pk):
     return render(request, "your_room/booking_status.html", {"booking": booking})
 
 
-@csrf_exempt
-def nylonpay_webhook(request):
-    if request.method != "POST":
-        return HttpResponse(status=405)
-
-    raw_body = request.body  # must verify the raw bytes, not parsed JSON
-    signature = request.headers.get("x-nylon-signature", "")
-
-    secret = settings.NYLONPAY_WEBHOOK_SECRET
-    print("DEBUG secret loaded:", (secret[:6] + "...") if secret else "MISSING/None")
-    print("DEBUG secret length:", len(secret) if secret else 0)
-    print("DEBUG signature received:", signature)
-    print("DEBUG raw body:", raw_body)
-
-    is_valid = nylonpay.verify_webhook_signature(
-        payload=raw_body,
-        signature=signature,
-        secret=settings.NYLONPAY_WEBHOOK_SECRET,
-    )
-    if not is_valid:
-        return HttpResponse("Invalid signature", status=401)
-
-    body = json.loads(raw_body)
-    delivery_id = body["delivery_id"]
-    event = body["event"]
-    payload = body["payload"]
-
-    # Delivery guarantee: at-least-once, so dedupe on delivery_id
-    if cache.get(f"processed:{delivery_id}"):
-        return HttpResponse("OK", status=200)
-
-    reference = payload["reference"]
-
-    try: 
-        booking = Booking.objects.get(reference=reference)
-    except Booking.DoesNotExist:
-        print(f"WEBHOOK WARNING: no Booking found for reference={reference!r} (event={event})")
-        cache.set(f"processed:{delivery_id}", True, timeout=86400)
-        return HttpResponse("OK", status=200)
-    
-    if event == "transaction.successful":
-        booking.status = "successful"
-        booking.save(update_fields=["status"])
-
-    elif event == "transaction.failed":
-        booking.status = "failed"
-        booking.failure_reason = payload.get("failureReason")
-        booking.save(update_fields=["status", "failure_reason"])
-
-    elif event == "transaction.cancelled":
-        booking.status = "cancelled"
-        booking.save(update_fields=["status"])
-
-    elif event == "transaction.processing":
-        booking.status = "processing"
-        booking.save(update_fields=["status"])
-
-    cache.set(f"processed:{delivery_id}", True, timeout=86400)
-    return HttpResponse("OK", status=200)
-
 # Feedback view. This recieves the information from the user and saves it on the database.
 
 def submit_feedback(request):
