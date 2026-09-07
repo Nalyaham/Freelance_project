@@ -16,36 +16,61 @@
 <body>
 <main>
   <h1 class="page-title container">{{unit.name}}</h1>
-  <div class="gallery container">
+  <div class="meta container">
+    <!--The if statements are to display the right information if the unit_type in the url is rental, hostel or airbnb-->
+    {% if unit_type == 'rental' %}
+    <div class="gallery container">
     <!-- This for loop is used to display the image of each unit whose pk is proived in the url --> 
     {% for img in unit.images.all %}
     <img src="{{ img.image.url }}" alt="{{ unit.name }}" />
     {% endfor %} 
     </div>
-  <div class="meta container">
-    <!--The if statements are to display the right information if the unit_type in the url is rental, hostel or airbnb-->
-    {% if unit_type == 'rental' %}
     <div>{{ unit.location }}</div>
     <div>{% if unit.self_contained %} Self contained 
       {% else %} Not self contained {% endif %}</div>
     <div>{{ unit.price|floatformat:0|intcomma }} UGX</div>
+
     {% elif unit_type == 'hostel' %}
-    <div>{{ unit.university }}</div>
-    <div>{{ unit.room_type|capfirst }}</div>
-    <div>{% if unit.self_contained %} Self contained {% else %} Not self contained {% endif %}</div>
-    <div>{{ unit.price|floatformat:0|intcomma }} UGX</div>
+      {% if unit.is_booked == False %}
+      <div class="gallery container">
+      <!-- This for loop is used to display the image of each unit whose pk is proived in the url --> 
+      {% for img in unit.images.all %}
+      <img src="{{ img.image.url }}" alt="{{ unit.name }}" />
+      {% endfor %} 
+      </div>
+      <div>{{ unit.university }}</div>
+      <div>{{ unit.room_type|capfirst }}</div>
+      <div>{% if unit.self_contained %} Self contained {% else %} Not self contained {% endif %}</div>
+      <div>{{ unit.price|floatformat:0|intcomma }} UGX</div>
+      {% else %} 
+      <p>Hostel room is already booked.</p>
+      {% endif %}
+
     {% else %}
+    <div class="gallery container">
+    <!-- This for loop is used to display the image of each unit whose pk is proived in the url --> 
+    {% for img in unit.images.all %}
+    <img src="{{ img.image.url }}" alt="{{ unit.name }}" />
+    {% endfor %} 
+    </div>
     <div>{{ unit.location }}</div>
     <div>{{ unit.price|floatformat:0|intcomma }} UGX</div>
     {% endif %}
   </div>
   <div class="center-action">
-    <button class="btn btn--lg" id="book-now" type="button" data-unit-type="{{ unit_type }}" data-unit-id="{{ unit.pk }}">
-    <!--Button carries the information of the unit type and pk being bought-->
-      Book Now
-    </button>
-    {% csrf_token %}
+      {% if unit_type == 'hostel' and unit.is_booked %}
+      <button class="btn btn--lg" type="button" disabled>
+        Cannot Book
+      </button>
+      {% else %}
+      <button class="btn btn--lg" id="book-now" type="button" data-unit-type="{{ unit_type }}" data-unit-id="{{ unit.pk }}">
+      <!--Button carries the information of the unit type and pk being bought-->
+        Book Now
+      </button>
+      {% endif %}
+      {% csrf_token %}
   </div>
+    
 </main>
 <footer class="footer container">
   <a class="logo" href="{% url 'index' %}"><b>Your</b><span>Room</span></a>
