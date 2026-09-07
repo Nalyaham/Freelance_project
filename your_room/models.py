@@ -39,15 +39,23 @@ class BaseUnit(models.Model):
     def __str__(self):
         return self.name
 
+class Lessor(models.Model):
+    name = models.CharField(max_length=150)
+    phone_number = models.CharField(max_length=20)
 
+    def __str__(self):
+        return self.name
+    
 class Rental(BaseUnit):
     room_type = models.CharField(max_length=10, choices=RoomType.choices)
     self_contained = models.BooleanField(default=False)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    landlord = models.ForeignKey(Lessor, related_name="rentals", on_delete=models.PROTECT, null=True, blank=True)
 
 
 class Airbnb(BaseUnit):
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    landlord = models.ForeignKey(Lessor, related_name="airbnbs", on_delete=models.PROTECT, null=True, blank=True)
 
 
 class Hostel(BaseUnit):
@@ -58,6 +66,7 @@ class Hostel(BaseUnit):
     self_contained = models.BooleanField(default=False)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     is_booked = models.BooleanField(default=False)
+    custodian = models.ForeignKey(Lessor, related_name="hostels", on_delete=models.PROTECT, null=True, blank=True)
 
 
 # ---------------------------------------------------------------------------
@@ -78,6 +87,7 @@ class UnitImageBase(models.Model):
 
 class RentalImage(UnitImageBase):
     unit = models.ForeignKey(Rental, related_name="images", on_delete=models.CASCADE)
+
 
    
 
@@ -102,27 +112,6 @@ class Feedback(models.Model):
     def __str__(self):
         return f"{self.name} ({self.created_at:%Y-%m-%d})"
 
-class LessorBase(models.Model):
-    name = models.CharField(max_length=150)
-    phone_number = models.CharField(max_length=20)
-
-    class Meta:
-        abstract = True
-
-    def __str__(self):
-        return self.name
-
-
-class LessorCustodian(LessorBase):
-    unit = models.OneToOneField(Rental, related_name="custodian", on_delete=models.CASCADE)
-
-
-class LessorCustodian(LessorBase):
-    unit = models.OneToOneField(Hostel, related_name="custodian", on_delete=models.CASCADE)
-
-
-class LessorCustodian(LessorBase):
-    unit = models.OneToOneField(Airbnb, related_name="custodian", on_delete=models.CASCADE)
 
 class Booking(models.Model):
     STATUS_CHOICES = [

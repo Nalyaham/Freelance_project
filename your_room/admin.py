@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Rental, RentalImage, Hostel, HostelImage, Airbnb, AirbnbImage, Feedback, Booking
+from .models import Rental, RentalImage, Hostel, HostelImage, Airbnb, AirbnbImage, Feedback, Lessor
 
 # This line allows to stitch the child model Image model to the parent
 # model so that they display on the same page. 
@@ -11,6 +11,7 @@ class RentalImageInline(admin.TabularInline):
 @admin.register(Rental)
 class RentalAdmin(admin.ModelAdmin):
     inlines = [RentalImageInline]
+    list_display = ["name", "location", "price", "landlord"]
 
 class HostelImageInline(admin.TabularInline):
     model = HostelImage
@@ -20,6 +21,7 @@ class HostelImageInline(admin.TabularInline):
 @admin.register(Hostel)
 class HostelAdmin(admin.ModelAdmin):
     inlines = [HostelImageInline]
+    list_display = ["name", "location", "price", "landlord"]
 
 class AirbnbImageInline(admin.TabularInline):
     model = AirbnbImage
@@ -29,7 +31,12 @@ class AirbnbImageInline(admin.TabularInline):
 @admin.register(Airbnb)
 class AirbnbAdmin(admin.ModelAdmin):
     inlines = [AirbnbImageInline]
+    list_display = ["name", "location", "price", "custodian"]
 
 # Feedback admin page
 admin.site.register(Feedback)
-admin.site.register(Booking)
+
+@admin.register(Lessor)
+class LessorAdmin(admin.ModelAdmin):
+    list_display = ["name", "phone_number"]
+    search_fields = ["name", "phone_number"]
