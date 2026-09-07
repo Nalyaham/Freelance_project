@@ -102,6 +102,28 @@ class Feedback(models.Model):
     def __str__(self):
         return f"{self.name} ({self.created_at:%Y-%m-%d})"
 
+class LessorBase(models.Model):
+    name = models.CharField(max_length=150)
+    phone_number = models.CharField(max_length=20)
+
+    class Meta:
+        abstract = True
+
+    def __str__(self):
+        return self.name
+
+
+class LessorCustodian(LessorBase):
+    unit = models.OneToOneField(Rental, related_name="custodian", on_delete=models.CASCADE)
+
+
+class LessorCustodian(LessorBase):
+    unit = models.OneToOneField(Hostel, related_name="custodian", on_delete=models.CASCADE)
+
+
+class LessorCustodian(LessorBase):
+    unit = models.OneToOneField(Airbnb, related_name="custodian", on_delete=models.CASCADE)
+
 class Booking(models.Model):
     STATUS_CHOICES = [
         ("pending", "Pending"),
@@ -122,5 +144,7 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"{self.unit_type} #{self.unit_id} — {self.reference} ({self.status})"
+
+    
 
    
