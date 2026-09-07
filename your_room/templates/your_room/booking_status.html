@@ -13,27 +13,49 @@
 
   <section class="center container">
     {% if booking.status == "successful" %}
-      <h2 class="section-title">✅ Booking Confirmed</h2>
-      <p>Your payment went through — {{ booking.unit_type|capfirst }} is booked.</p>
+      <div class="center container">
+        <h2 class="section-title container">✅ Booking Confirmed</h2>
+        <p>Your payment went through!</p>
+      </div>
+      <div class="meta container">
+        <div><strong>Reference:</strong> {{ booking.reference }}</div>
+        <div><strong>Name:</strong> {{ booking.name }}</div>
+        <div><strong>Phone:</strong> {{ booking.phone_number }}</div>
+      </div>
+      <div class="center container">
+        <h2 class="section-title container">Contact of {{booking.unit_type|capfirst}}</h3>
+        <p> {{lessor.name}} </p>
+        <p> {{lessor.phone_number}} <br>
+          <b>
+          Please copy and call this number in order to book your room. </b>
+        </p>
+
+      </div>
     {% elif booking.status == "failed" %}
       <h2 class="section-title">❌ Payment Failed</h2>
+      {% if booking.failure_reason == "Payment failed" %}
+      <p>"The payment could not be completed."</p>
+      {% else %}
       <p>{{ booking.failure_reason|default:"The payment could not be completed." }}</p>
+      {% endif %}
+      <div class="meta container">
+        <div><strong>Reference:</strong> {{ booking.reference }}</div>
+        <div><strong>Name:</strong> {{ booking.name }}</div>
+        <div><strong>Phone:</strong> {{ booking.phone_number }}</div>
+      </div>
     {% elif booking.status == "cancelled" %}
       <h2 class="section-title">🚫 Payment Cancelled</h2>
       <p>No amount was charged.</p>
+      <div class="meta container">
+        <div><strong>Reference:</strong> {{ booking.reference }}</div>
+        <div><strong>Name:</strong> {{ booking.name }}</div>
+        <div><strong>Phone:</strong> {{ booking.phone_number }}</div>
+      </div>
     {% else %}
       <h2 class="section-title">⏳ Processing…</h2>
       <p>Check your phone to approve the payment. This page will update automatically.</p>
     {% endif %}
   </section>
-
-  {% if booking.status == "successful" or booking.status == "failed" or booking.status == "cancelled" %}
-  <div class="meta container">
-    <div><strong>Reference:</strong> {{ booking.reference }}</div>
-    <div><strong>Name:</strong> {{ booking.name }}</div>
-    <div><strong>Phone:</strong> {{ booking.phone_number }}</div>
-  </div>
-  {% endif %}
 
   <div class="center-action">
     <a href="{% url 'index' %}" class="btn btn--sm">Back to YourRoom</a>
@@ -55,18 +77,5 @@
   </div>
 </footer>
 
-{% if booking.status == "pending" or booking.status == "processing" %}
-<script>
-  var reloadTimer = setTimeout(function () { window.location.reload(); }, 5000);
-
-  // Reload immediately once the tab becomes visible again,
-  // rather than waiting for a throttled background timer.
-  document.addEventListener("visibilitychange", function () {
-    if (document.visibilityState === "visible") {
-      window.location.reload();
-    }
-  });
-</script>
-{% endif %}
 </body>
 </html>

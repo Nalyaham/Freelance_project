@@ -11,7 +11,7 @@ class RentalImageInline(admin.TabularInline):
 @admin.register(Rental)
 class RentalAdmin(admin.ModelAdmin):
     inlines = [RentalImageInline]
-    list_display = ["name", "location", "price", "landlord"]
+    list_display = ["name", "location", "price", "lessor"]
 
 class HostelImageInline(admin.TabularInline):
     model = HostelImage
@@ -21,7 +21,7 @@ class HostelImageInline(admin.TabularInline):
 @admin.register(Hostel)
 class HostelAdmin(admin.ModelAdmin):
     inlines = [HostelImageInline]
-    list_display = ["name", "location", "price", "landlord"]
+    list_display = ["name", "location", "price", "lessor"]
 
 class AirbnbImageInline(admin.TabularInline):
     model = AirbnbImage
@@ -31,7 +31,7 @@ class AirbnbImageInline(admin.TabularInline):
 @admin.register(Airbnb)
 class AirbnbAdmin(admin.ModelAdmin):
     inlines = [AirbnbImageInline]
-    list_display = ["name", "location", "price", "custodian"]
+    list_display = ["name", "location", "price", "lessor"]
 
 # Feedback admin page
 admin.site.register(Feedback)

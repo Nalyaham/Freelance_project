@@ -50,12 +50,12 @@ class Rental(BaseUnit):
     room_type = models.CharField(max_length=10, choices=RoomType.choices)
     self_contained = models.BooleanField(default=False)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    landlord = models.ForeignKey(Lessor, related_name="rentals", on_delete=models.PROTECT, null=True, blank=True)
+    lessor = models.ForeignKey(Lessor, related_name="rentals", on_delete=models.PROTECT, null=True, blank=True)
 
 
 class Airbnb(BaseUnit):
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    landlord = models.ForeignKey(Lessor, related_name="airbnbs", on_delete=models.PROTECT, null=True, blank=True)
+    lessor = models.ForeignKey(Lessor, related_name="airbnbs", on_delete=models.PROTECT, null=True, blank=True)
 
 
 class Hostel(BaseUnit):
@@ -66,7 +66,7 @@ class Hostel(BaseUnit):
     self_contained = models.BooleanField(default=False)
     price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     is_booked = models.BooleanField(default=False)
-    custodian = models.ForeignKey(Lessor, related_name="hostels", on_delete=models.PROTECT, null=True, blank=True)
+    lessor = models.ForeignKey(Lessor, related_name="hostels", on_delete=models.PROTECT, null=True, blank=True)
 
 
 # ---------------------------------------------------------------------------

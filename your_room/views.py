@@ -161,6 +161,8 @@ def book_now(request, unit_type, pk):
     phone = request.POST.get("phone_number", "").strip()
     reference = str(uuid.uuid4())
 
+    lessor = unit.lessor
+
     booking = {
         "unit_type": unit_type,
         "name": name,
@@ -195,7 +197,7 @@ def book_now(request, unit_type, pk):
     else:
         booking["failure_reason"] = result.error
 
-    return render(request, "your_room/booking_status.html", {"booking": booking})
+    return render(request, "your_room/booking_status.html", {"booking": booking, "lessor": lessor})
 
 
 # Feedback view. This recieves the information from the user and saves it on the database.
