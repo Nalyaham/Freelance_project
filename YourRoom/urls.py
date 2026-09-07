@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from your_room.views import index, rental, unit_detail, hostel, airbnb, search, book_now,nylonpay_webhook, submit_feedback, booking_status_page
+from your_room.views import index, rental, unit_detail, hostel, airbnb, search, book_now, submit_feedback
 from django.conf import settings
 from django.conf.urls.static import static
 
