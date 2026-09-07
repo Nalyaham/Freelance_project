@@ -155,35 +155,42 @@ def book_now(request, unit_type, pk):
     if request.method != "POST":
         return JsonResponse({"status": "error", "message": "Invalid method"}, status=405)
 
-# From here the view collects information of the model being bought and the number making the purchase. 
     model = UNIT_MODELS.get(unit_type)
-    unit = get_object_or_404(model, pk=pk) # This line gets the unit
-    name = request.POST.get("name")
-    phone = request.POST.get("phone_number")
-    reference = str(uuid.uuid4()) 
+    unit = get_object_or_404(model, pk=pk)
+    name = request.POST.get("name", "").strip()
+    phone = request.POST.get("phone_number", "").strip()
+    reference = secrets.token_hex(7)
 
-# The reference of the item being booked is saved here inthe DB
-    booking = Booking.objects.create(
-        unit_type=unit_type, unit_id=unit.pk,
-        name=name, phone_number=phone, reference=reference,
-    )
+    booking = {
+        "unit_type": unit_type,
+        "name": name,
+        "phone_number": phone,
+        "reference": reference,
+        "status": "failed",
+        "failure_reason": None,
+    }
 
-# The payement is collected at this point with from the browser
     try:
-        payment = nylonpay.collect_payment(
-                amount= int(unit.price),
-                currency="UGX",
-                customer={"name": name, "phone_number": phone},
-                description= f"Booking: {unit.name}",
-                reference=reference
-            )
+        result = nylonpay.collect_payment_and_resolve(
+            amount=int(unit.price),
+            currency="UGX",
+            customer={"name": name, "phone_number": phone},
+            description=f"Booking: {unit.name}",
+            reference=reference,
+            method="mobileMoney",
+        )
     except SdkException as e:
-        booking.status = "failed"
-        booking.failure_reason = str(e)
-        booking.save(update_fields=["status", "failure_reason"])
-        return JsonResponse({"status": "error", "message": str(e)}, status=400)
+        booking["failure_reason"] = str(e)
+        return render(request, "your_room/booking_status.html", {"booking": booking})
 
-    return JsonResponse({"status": booking.status, "reference": payment.reference})
+    if result.is_ok:
+        tx = result.value
+        booking["status"] = tx.status
+        booking["reference"] = tx.reference
+    else:
+        booking["failure_reason"] = result.error
+
+    return render(request, "your_room/booking_status.html", {"booking": booking})
 
 
 @csrf_exempt
