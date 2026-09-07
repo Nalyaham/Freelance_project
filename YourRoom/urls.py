@@ -29,9 +29,7 @@ urlpatterns = [
     path("airbnb/", airbnb, name = "airbnb"), 
     path("search/", search, name = "search"),
     path("feedback/", submit_feedback, name="submit-feedback"),
-    path("book/<str:unit_type>/<int:pk>/", book_now, name="book-now"),
-path("webhooks/nylonpay/", nylonpay_webhook, name="nylonpay-webhook"),
-path("booking/<str:reference>/", booking_status_page, name="booking-status-page"),
+    path("book/<str:unit_type>/<int:pk>/", book_now, name="book-now")
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
