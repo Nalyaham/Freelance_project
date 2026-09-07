@@ -111,29 +111,8 @@ if (feedback) {
             book.textContent = "Book Now";
             return;
           }
-          alert("Payment request sent! Check your phone to approve.");
-          pollBookingStatus(data.reference);
-          });
-        function pollBookingStatus(reference) {
-      var interval = setInterval(function () {
-        fetch("/booking-status/" + reference + "/")
-          .then(function (res) { return res.json(); })
-          .then(function (data) {
-            if (data.status === "successful") {
-              clearInterval(interval);
-              alert("Booking confirmed! 🎉");
-              book.disabled = false;
-              book.textContent = "Book Now";
-            } else if (data.status === "failed" || data.status === "cancelled") {
-              clearInterval(interval);
-              alert("Payment " + data.status + (data.failure_reason ? ": " + data.failure_reason : ""));
-              book.disabled = false;
-              book.textContent = "Book Now";
-            }
-            // "pending"/"processing" → keep polling, no action needed
-          });
-      }, 3000); // every 3 seconds// stop after 5 min
-    }
+          window.location.href = "/booking/" + data.reference + "/";
+});
   });
 
 

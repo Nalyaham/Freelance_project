@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Rental, RentalImage, Hostel, HostelImage, Airbnb, AirbnbImage, Feedback
+from .models import Rental, RentalImage, Hostel, HostelImage, Airbnb, AirbnbImage, Feedback, Booking
 
 # This line allows to stitch the child model Image model to the parent
 # model so that they display on the same page. 
@@ -32,3 +32,4 @@ class AirbnbAdmin(admin.ModelAdmin):
 
 # Feedback admin page
 admin.site.register(Feedback)
+admin.site.register(Booking)

@@ -222,6 +222,7 @@ def nylonpay_webhook(request):
     try: 
         booking = Booking.objects.get(reference=reference)
     except Booking.DoesNotExist:
+        print(f"WEBHOOK WARNING: no Booking found for reference={reference!r} (event={event})")
         cache.set(f"processed:{delivery_id}", True, timeout=86400)
         return HttpResponse("OK", status=200)
     
@@ -229,12 +230,12 @@ def nylonpay_webhook(request):
         booking.status = "successful"
         booking.save(update_fields=["status"])
 
-    elif event in "transaction.failed":
+    elif event == "transaction.failed":
         booking.status = "failed"
         booking.failure_reason = payload.get("failureReason")
         booking.save(update_fields=["status", "failure_reason"])
 
-    elif event in "transaction.cancelled":
+    elif event == "transaction.cancelled":
         booking.status = "cancelled"
         booking.save(update_fields=["status"])
 
