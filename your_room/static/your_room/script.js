@@ -79,44 +79,39 @@ if (feedback) {
 
   // Book now
   var book = document.getElementById("book-now");
-  if (book) {
-    book.addEventListener("click", function () {
-      var name = prompt("Full name for the booking:");
-      if (!name) return;
-      var phone = prompt("Mobile money phone number (e.g. +2567XXXXXXXX):");
-      if (!phone) return;
-// This line below reads the value of the unit_type and primary key in the button
-      var unitType = book.dataset.unitType;
-      var unitId = book.dataset.unitId;
-      var csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+if (book) {
+  book.addEventListener("click", function () {
+    var name = prompt("Full name for the booking:");
+    if (!name) return;
+    var phone = prompt("Mobile money phone number (e.g. +2567XXXXXXXX):");
+    if (!phone) return;
 
-      book.disabled = true;
-      book.textContent = "Processing...";
+    var unitType = book.dataset.unitType;
+    var unitId = book.dataset.unitId;
+    var csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
 
-// This line creates a form for the data of name and phone obtained from the user
-      var formData = new FormData();
-      formData.append("name", name);
-      formData.append("phone_number", phone);
+    book.disabled = true;
+    book.textContent = "Processing...";
 
-      fetch("/book/" + unitType + "/" + unitId + "/", {
-        method: "POST",
-        headers: { "X-CSRFToken": csrfToken },
-        body: formData,
-      })
-        .then(function (res) { return res.json(); })
-        .then(function (data) {
-          if (data.status === "error") {
-            alert(data.message || "Something went wrong.");
-            book.disabled = false;
-            book.textContent = "Book Now";
-            return;
-          }
-          window.location.href = "/booking/" + data.reference + "/";
-});
+    var form = document.createElement("form");
+    form.method = "POST";
+    form.action = "/book/" + unitType + "/" + unitId + "/";
+
+    function addField(fieldName, value) {
+      var input = document.createElement("input");
+      input.type = "hidden";
+      input.name = fieldName;
+      input.value = value;
+      form.appendChild(input);
+    }
+    addField("csrfmiddlewaretoken", csrfToken);
+    addField("name", name);
+    addField("phone_number", phone);
+
+    document.body.appendChild(form);
+    form.submit();
   });
-
-
-
+}
 // This line of code helps to remove any bfcache. Any text in the search bar is removed
 // once the user returns to the page. 
 window.addEventListener("pageshow", function (event) {
@@ -126,4 +121,4 @@ window.addEventListener("pageshow", function (event) {
   }
 });
   }
-});
+);
