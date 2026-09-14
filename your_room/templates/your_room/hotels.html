@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hotels | YourRoom</title>
+<meta name="description" content="Browse airbnbs by location, name and price." />
+<meta property="og:title" content="Air bnb | YourRoom" />
+<meta property="og:description" content="Browse airbnbs by location, name and price." />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="stylesheet" href="{% static 'your_room/styles.css' %}" />
+</head>
+<body>
+<main>
+  <h1 class="page-title container">Hotels</h1>
+  <div class = "filters container" >
+    <h2 class="filter-title container">Filter by:</h2>
+    <form class = "filters container", method = "get", id = "filter-form">
+      <select name = "location", class = "filter", onchange="document.getElementById('filter-form').submit()">
+        <option value = "">Location</option>
+        {% for loc in locations %}
+        <option value = "{{ loc }}" {% if request.GET.location == loc %} selected {% endif %}>{{ loc }}</option>
+        {% endfor %}
+      </select>
+
+    <select name="name", class="filter", onchange="document.getElementById('filter-form').submit()">
+      <option value="">Name of hotel</option>
+      {% for name in names %}
+      <option value="{{ name }}"{% if request.GET.name == name %} selected {% endif %}>{{ name }}</option>
+      {% endfor %}
+    </select>
+    </form>
+  </div>
+  <div class="grid container">
+    {% for unit in units %}
+    <article class="card">
+      {% with units.image.first as img %}
+        {% if img %}
+            <img src="{{ img.image.url }}" alt="{{ unit.name }}" loading="lazy" />
+        {% else %}
+            <img src="{% static 'your_room/images/hero.png' %}" alt="{{ unit.name }}" loading="lazy" />
+        {% endif %}
+      {% endwith %}
+      <h3>{{ unit.name }}</h3>
+      <p>{{ unit.location}}</p>
+      <div class="card__action"><a class="btn btn--sm" href="{% url 'unit-detail' 'hotel' unit.pk %}">Details</a></div>
+    </article>
+    {% endfor %}
+  </div>
+</main>
+<footer class="footer container">
+  <a class="logo" href="{% url 'index' %}"><b>Your</b><span>Room</span></a>
+  <div class="col">
+    <strong>Get a Room</strong>
+    <a href="{% url 'rentals' %}">Rentals</a>
+    <a href="{% url 'hostels' %}">Hostels</a>
+    <a href="{% url 'airbnb' %}">Air bnb</a>
+  </div>
+  <div class="col">
+    <strong>Contact us</strong>
+    <span>Whatsapp number</span>
+    <span>email@gmail.com</span>
+  </div>
+</footer>
+<script src="{% static 'your_room/script.js' %}"></script>
+</body>
+</html>

@@ -20,7 +20,8 @@ import secrets
 
 UNIT_MODELS = { 'rental' : Rental, 
                'hostel' : Hostel, 
-               'airbnb' : Airbnb}
+               'airbnb' : Airbnb,
+               'hotel' : Hotel}
 
 
 def index(request):
