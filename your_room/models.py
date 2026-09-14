@@ -25,7 +25,6 @@ class RoomType(models.TextChoices):
 
 class BaseUnit(models.Model):
     name = models.CharField(max_length=150)
-    description = models.TextField(blank=True)
     location = models.CharField(max_length=150)
 
     # This makes django not to make a separate table for the base unit
