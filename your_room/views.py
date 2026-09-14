@@ -1,5 +1,5 @@
 
-from your_room.models import Rental, Hostel, Airbnb, Feedback, Booking
+from your_room.models import Rental, Hostel, Airbnb, Feedback, Booking, Hotel
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from django.http import JsonResponse
@@ -102,9 +102,22 @@ def airbnb(request):
     
     return render(request, "your_room/airbnb.html", context)
 
-# your_room/views.py
+def hotel(request):
+    units = Hotel.objects.prefetch_related("images")
+    
+    location = request.GET.get("location")
+    name = request.GET.get("name")
 
-from your_room.models import Rental, Hostel, Airbnb
+    if location: 
+        units = units.filter(location__icontains = location)
+    if name: 
+        units = units.filter(name__icontains = name)
+
+    context = { "locations" : Hotel.objects.values_list("location", flat=True).distinct(), 
+                "names" : Hotel.objects.values_list("name", flat=True).distinct(),
+                "units": units}
+    
+    return render(request, "your_room/hotels.html", context)
 
 def search(request):
     q = request.GET.get("q", "").strip()
