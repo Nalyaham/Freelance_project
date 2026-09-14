@@ -143,18 +143,21 @@ def search(request):
             )
         hostels = Hostel.objects.filter(hostel_filter, is_booked=False).prefetch_related("images")
 
-        airbnb_filter = Q()
+        airbnb_and_hotel_filter = Q()
         for word in words:
-            airbnb_filter &= (
+            airbnb_and_hotel_filter &= (
                 Q(name__icontains=word)
                 | Q(location__icontains=word)
             )
-        airbnbs = Airbnb.objects.filter(airbnb_filter).prefetch_related("images")
+        airbnbs = Airbnb.objects.filter(airbnb_and_hotel_filter).prefetch_related("images")
+
+        hotels = Hotel.objects.filter(airbnb_and_hotel_filter).prefetch_related("images")
 
     results = (
         [{"unit": u, "type": "rental"} for u in rentals]
         + [{"unit": u, "type": "hostel"} for u in hostels]
         + [{"unit": u, "type": "airbnb"} for u in airbnbs]
+        + [{"unit": u, "type": "hotel"} for u in hotels]
     )
     return render(request, "your_room/search.html", {"q": q, "results": results})
 
