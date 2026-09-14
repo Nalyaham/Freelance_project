@@ -67,6 +67,10 @@ class Hostel(BaseUnit):
     is_booked = models.BooleanField(default=False)
     lessor = models.ForeignKey(Lessor, related_name="hostels", on_delete=models.PROTECT, null=True, blank=True)
 
+class Hotel(BaseUnit):
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    lessor = models.ForeignKey(Lessor, related_name="hotels", on_delete=models.PROTECT, null=True, blank=True)
+
 
 # ---------------------------------------------------------------------------
 # Images — one small model per unit type, each capped at 3 images.
