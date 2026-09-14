@@ -140,7 +140,6 @@ def search(request):
             hostel_filter &= (
                 Q(name__icontains=word)
                 | Q(university__icontains=word)
-                | Q(location__icontains=word)
             )
         hostels = Hostel.objects.filter(hostel_filter, is_booked=False).prefetch_related("images")
 
@@ -149,7 +148,6 @@ def search(request):
             airbnb_filter &= (
                 Q(name__icontains=word)
                 | Q(location__icontains=word)
-                | Q(description__icontains=word)
             )
         airbnbs = Airbnb.objects.filter(airbnb_filter).prefetch_related("images")
 
