@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Rental, RentalImage, Hostel, HostelImage, Airbnb, AirbnbImage, Feedback, Lessor
+from .models import Rental, RentalImage, Hostel, HostelImage, Airbnb, AirbnbImage, Feedback, Lessor, Hotel
 
 # This line allows to stitch the child model Image model to the parent
 # model so that they display on the same page. 
@@ -40,3 +40,5 @@ admin.site.register(Feedback)
 class LessorAdmin(admin.ModelAdmin):
     list_display = ["name", "phone_number"]
     search_fields = ["name", "phone_number"]
+
+

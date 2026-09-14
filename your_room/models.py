@@ -91,16 +91,14 @@ class UnitImageBase(models.Model):
 class RentalImage(UnitImageBase):
     unit = models.ForeignKey(Rental, related_name="images", on_delete=models.CASCADE)
 
-
-   
-
 class AirbnbImage(UnitImageBase):
     unit = models.ForeignKey(Airbnb, related_name="images", on_delete=models.CASCADE)
 
-  
-
 class HostelImage(UnitImageBase):
     unit = models.ForeignKey(Hostel, related_name="images", on_delete=models.CASCADE)
+
+class HotelImage(UnitImageBase):
+    unit = models.ForeignKey(Hotel, related_name="images", on_delete=models.CASCADE)
 
 # Feedback Model
 class Feedback(models.Model):
