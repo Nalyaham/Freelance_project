@@ -107,8 +107,11 @@ h2.section-title{font-size:clamp(1.375rem, 4vw, 1.75rem);font-weight:400;padding
 h2.filter-title{font-size:1.125rem;font-weight:400; padding: 0px; display: flex;
   justify-content: center; /* Horizontally centers the heading */
   align-items: center; }
-h1.page-title{font-size:clamp(1.375rem, 4vw, 2rem);font-weight:400;padding-top:32px}
-
+h1.page-title{font-size:clamp(1.375rem, 4vw, 2rem);font-weight:400;padding-top:32px; color:rgb(249, 249, 249)}
+.page-title{
+  background-image:linear-gradient(rgba(0,0,0,.45),rgba(0,0,0,.45)),url("images/hero.png");
+  background-size:cover;background-position:center;
+}
 .grid{display:grid;gap:32px;padding-block:32px}
 @media(min-width:768px){.grid{grid-template-columns:repeat(2,1fr)}}
 @media(min-width:1024px){.grid{grid-template-columns:repeat(3,1fr)}}
