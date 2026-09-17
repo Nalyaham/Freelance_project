@@ -16,7 +16,7 @@
 <main>
   <h1 class="page-title container">Air bnb</h1>
   <div class = "filters container" >
-    <span class="filter_by" style ="background-color: #FFE7D3;"><img src="{% static 'your_room/images/filter_icon.png' %}" alt="" />Filter by:</span>
+    <span class="filters filter_by no_grow" style ="background-color: #FFE7D3;"><img src="{% static 'your_room/images/filter_icon.png' %}" alt="" />Filter by:</span>
     <form class = "filters container", method = "get", id = "filter-form" style ="padding-top: 0px;">
       <select name = "location", class = "filter", onchange="document.getElementById('filter-form').submit()">
         <option value = "">Location</option>
