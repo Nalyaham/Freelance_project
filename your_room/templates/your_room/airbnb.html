@@ -17,7 +17,7 @@
   <h1 class="page-title container">Air bnb</h1>
   <div class = "filters container" >
     <span class="filter_by" style ="background-color: #FFE7D3;"><img src="{% static 'your_room/images/filter_icon.png' %}" alt="" />Filter by:</span>
-    <form class = "filters container", method = "get", id = "filter-form">
+    <form class = "filters container", method = "get", id = "filter-form" >
       <select name = "location", class = "filter", onchange="document.getElementById('filter-form').submit()">
         <option value = "">Location</option>
         {% for loc in locations %}
@@ -43,8 +43,13 @@
             <img src="{% static 'your_room/images/hero.png' %}" alt="{{ unit.name }}" loading="lazy" />
         {% endif %}
       {% endwith %}
-      <h3>{{ unit.name }}</h3>
-      <p>{{ unit.location}}</p>
+      <div class="card_description">
+        <h3>{{ unit.name }}</h3>
+        <div class = "location">
+          <img src = "{% static 'your_room/images/location_icon.png' %}" />
+          <p>{{ unit.location}}</p>
+        </div>
+      </div>
       <div class="card__action"><a class="btn btn--sm" href="{% url 'unit-detail' 'airbnb' unit.pk %}">Details</a></div>
     </article>
     {% endfor %}
