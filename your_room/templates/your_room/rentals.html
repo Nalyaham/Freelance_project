@@ -52,12 +52,19 @@
           <h3>{{ unit.name }}</h3>
             <div class ="unit_specification_section">
               <div class = "unit_specification">
-                <img src = "{% static 'your_room/images/bed_icon.png' %}" />
-                <p>{{ unit.get_room_type_display }}</p>
-              </div>
-              <div class = "unit_specification">
                 <img src = "{% static 'your_room/images/location_icon.png' %}" />
                 <p>{{ unit.location}}</p>
+              </div>
+              <div class = "unit_specification">
+                <img src = "{% static 'your_room/images/bed_icon.png' %}" />
+                <p>{{ unit.get_room_type_display }}</p>
+              </div><div class = "unit_specification">
+                <img src = "{% static 'your_room/images/bathroom_icon.png' %}" />
+                {% if unit.self_contained %}
+                <p>Self contained</p>
+                {% else %}
+                <p>Not self-contained</p>
+                {% endif %}
               </div>
             </div>
         </div>
