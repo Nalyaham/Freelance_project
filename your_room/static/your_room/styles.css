@@ -134,10 +134,12 @@ h1.page-title{font-size:clamp(1.375rem, 4vw, 2rem);font-weight:400;padding-top:3
   flex-direction:column; 
   padding-left:12px;
 }
-.card_description h3{margin-top:12px;font-size:clamp(1.125rem, 4vw, 1.25rem);font-weight:600}
-.card_location{display:flex;flex-direction:row; align-items:center;gap:8px;}
-.card_location img{width:0.85rem;height:0.85rem;object-fit:fill;background:transparent}
-.card_location p{margin-top:8px;font-size:clamp(0.85rem, 4vm, 0.875rem); padding-top:8px; padding-bottom:10px}
+.card_description h3{margin-top:12px;font-size:clamp(1.125rem, 4vw, 1.25rem);font-weight:600; padding-bottom:5px;}
+.card_description p{font-size:clamp(0.85rem, 4vw, 0.875rem)}
+.unit_specification_section {display:flex;flex-direction:row;gap:16px}
+.unit_specification{display:flex;flex-direction:row; align-items:center;gap:8px;}
+.unit_specification img{width:0.85rem;height:0.85rem;object-fit:contain;background:transparent}
+.unit_specification p{ont-size:clamp(0.85rem, 4vw, 0.875rem)}
 .card__action{display:flex;justify-content:center;margin-block:10px}
 .btn{
   display:inline-block;border:1px solid var(--border);border-radius:20px;
