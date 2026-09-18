@@ -58,7 +58,8 @@
               <div class = "unit_specification">
                 <img src = "{% static 'your_room/images/bed_icon.png' %}" />
                 <p>{{ unit.get_room_type_display }}</p>
-              </div><div class = "unit_specification">
+              </div>
+              <div class = "unit_specification">
                 <img src = "{% static 'your_room/images/bathroom_icon.png' %}" />
                 {% if unit.self_contained %}
                 <p>Self contained</p>
