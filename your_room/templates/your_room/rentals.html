@@ -17,8 +17,8 @@
   <h1 class="page-title container">Rentals</h1>
   <div class = "filters container" >
     <span class="filters filter_by"><img src="{% static 'your_room/images/filter_icon.png' %}" alt="" />Filter by:</span>
-    <form class = "filters filter_container", method = "get", id = "filter-form">
-      <select name = "location", class = "filter", onchange="document.getElementById('filter-form').submit()">
+    <form class = "filters filter_container" method = "get" id = "filter-form">
+      <select name = "location" class = "filter" onchange="document.getElementById('filter-form').submit()">
         <option value = "">Location</option>
         {% for loc in locations %}
         <option value = "{{ loc }}" {% if request.GET.location == loc %} selected {% endif %}>{{ loc }}</option>
@@ -95,6 +95,7 @@
       <span>Whatsapp number</span>
       <span>email@gmail.com</span>
     </div>
+  </div>
 </footer>
 <script src="{% static 'your_room/script.js' %}"></script>
 </body>
