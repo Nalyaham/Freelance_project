@@ -16,7 +16,7 @@
 <main>
   <h1 class="page-title container">Hostels</h1>
   <div class = "filters container" >
-    <h2 class="filter-title container">Filter by:</h2>
+    <span class="filters filter_by"><img src="{% static 'your_room/images/filter_icon.png' %}" alt="" />Filter by:</span>
     <form class = "filters filter_container", method = "get", id = "filter-form">
       <select name = "university", class = "filter", onchange="document.getElementById('filter-form').submit()">
         <option value = "">University</option>
@@ -47,15 +47,29 @@
             <img src="{% static 'your_room/images/hero.png' %}" alt="{{ unit.name }}" loading="lazy" />
           {% endif %}
         {% endwith %}
-        <h3>{{ unit.university }}</h3>
-        <p>{{ unit.room_type|capfirst }}</p>
-        <p>{% if unit.self_contained %} Self contained {% else %} Not self contained {% endif %}</p>
+        <div class="card_description">
+          <h3>{{ unit.university }}</h3>
+          <div class ="unit_specification_section">
+            <div class = "unit_specification">
+              <img src = "{% static 'your_room/images/bed_icon.png' %}" />
+              <p>{{ unit.room_type|capfirst }}</p>
+            </div>
+            <div class = "unit_specification">
+              <img src = "{% static 'your_room/images/bathroom_icon.png' %}" />
+              {% if unit.self_contained %}
+              <p>Self contained</p>
+              {% else %}
+              <p>Not self-contained</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
         <div class="card__action">
           <a class="btn btn--sm" href="{% url 'unit-detail' 'hostel' unit.pk %}">Details</a>
         </div>
       </article>
     {% empty %}
-      <p>No rentals match those filters.</p>
+      <p>No hostels match those filters.</p>
     {% endfor %}
   </div>
 </main>
