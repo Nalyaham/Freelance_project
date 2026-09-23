@@ -47,16 +47,14 @@
       {% endif %}
 
     {% else %}
-    <div class = "unit_slider_and_description">
-      <div class="slider" id="slider">
-      <!-- This for loop is used to display the image of each unit whose pk is proived in the url --> 
-      {% for img in unit.images.all %}
-        <div class="slide" ><img src="{{ img.image.url }}" alt="{{ unit.name }}" /></div>
-      {% endfor %} 
-      </div>
-      <div>{{ unit.location }}</div>
-      <div>{{ unit.price|floatformat:0|intcomma }} UGX</div>
+    <div class="gallery container">
+    <!-- This for loop is used to display the image of each unit whose pk is proived in the url --> 
+    {% for img in unit.images.all %}
+    <img src="{{ img.image.url }}" alt="{{ unit.name }}" />
+    {% endfor %} 
     </div>
+    <div>{{ unit.location }}</div>
+    <div>{{ unit.price|floatformat:0|intcomma }} UGX</div>
     {% endif %}
   </div>
   <div class="center-action">
