@@ -47,14 +47,16 @@
       {% endif %}
 
     {% else %}
-    <div class="gallery container">
-    <!-- This for loop is used to display the image of each unit whose pk is proived in the url --> 
-    {% for img in unit.images.all %}
-    <img src="{{ img.image.url }}" alt="{{ unit.name }}" />
-    {% endfor %} 
+    <div class = "unit_slider_and_description">
+      <div class="slider" id="slider">
+      <!-- This for loop is used to display the image of each unit whose pk is proived in the url --> 
+      {% for img in unit.images.all %}
+        <div class="slide" ><img src="{{ img.image.url }}" alt="{{ unit.name }}" /></div>
+      {% endfor %} 
+      </div>
+      <div>{{ unit.location }}</div>
+      <div>{{ unit.price|floatformat:0|intcomma }} UGX</div>
     </div>
-    <div>{{ unit.location }}</div>
-    <div>{{ unit.price|floatformat:0|intcomma }} UGX</div>
     {% endif %}
   </div>
   <div class="center-action">
@@ -83,8 +85,8 @@
   </div>
   <div class="col">
     <strong>Contact us</strong>
-    <span>Whatsapp number</span>
-    <span>email@gmail.com</span>
+    <span>0764413127</span>
+    <span>getyourroom28@gmail.com</span>
   </div>
 </footer>
 <script src="{% static 'your_room/script.js' %}"></script>
