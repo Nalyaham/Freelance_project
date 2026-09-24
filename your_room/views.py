@@ -63,7 +63,8 @@ def rental(request):
 def unit_detail(request,unit_type, pk): 
     model = UNIT_MODELS.get(unit_type)
     unit = get_object_or_404(model.objects.prefetch_related("images"), pk=pk)
-    return render(request, "your_room/detail.html", {"unit": unit, "unit_type": unit_type})
+    units = model.objects.all()
+    return render(request, "your_room/detail.html", {"unit": unit, "unit_type": unit_type, "units":units})
 
 def hostel(request):
     units = Hostel.objects.filter(is_booked=False).prefetch_related("images")

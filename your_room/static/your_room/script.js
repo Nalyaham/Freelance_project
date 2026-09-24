@@ -112,6 +112,25 @@ if (book) {
     form.submit();
   });
 }
+  var slider = document.getElementById("slider");
+  var dotsWrap = document.getElementById("dots");
+
+  if (slider && dotsWrap) {
+    var slides = slider.querySelectorAll(".slide");
+    var dots = dotsWrap.querySelectorAll(".dot");
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          var index = Array.prototype.indexOf.call(slides, entry.target);
+          dots.forEach(function (d) { d.classList.remove("active"); });
+          if (dots[index]) dots[index].classList.add("active");
+        }
+      });
+    }, { root: slider, threshold: 0.6 });
+
+    slides.forEach(function (slide) { observer.observe(slide); });
+  }
 // This line of code helps to remove any bfcache. Any text in the search bar is removed
 // once the user returns to the page. 
 window.addEventListener("pageshow", function (event) {

@@ -15,8 +15,7 @@
 </head>
 <body>
 <main>
-  <h1 class="page-title container">{{unit.name}}</h1>
-  <div class="meta container">
+  <div class ="unit_slider_section">
     <!--The if statements are to display the right information if the unit_type in the url is rental, hostel or airbnb-->
     {% if unit_type == 'rental' %}
     <div class="gallery container">
@@ -47,13 +46,68 @@
       {% endif %}
 
     {% else %}
-    <div class="gallery container">
-    <!-- This for loop is used to display the image of each unit whose pk is proived in the url --> 
-    {% for img in unit.images.all %}
-    <img src="{{ img.image.url }}" alt="{{ unit.name }}" />
-    {% endfor %} 
+    <div class="slider-wrapper">
+      <div class="slider" id="slider">
+        {% for img in unit.images.all %}
+        <div class="slide"><img src="{{ img.image.url }}" alt="{{ unit.name }}" /></div>
+        {% endfor %}
+      </div>
+      <div class="dots" id="dots">
+        {% for img in unit.images.all %}
+        <div class="dot{% if forloop.first %} active{% endif %}"></div>
+        {% endfor %}
+      </div>
     </div>
-    <div>{{ unit.location }}</div>
+    </div>
+    <div class = "unit unit_slider_section">
+      <div><h3>{{ unit.name }}</h3></div>
+      <div style="color:#f2b997;"><h3>{{ unit.price|floatformat:0|intcomma }} UGX</h3></div>
+      
+      <div class = "unit_specification">
+        <img src = "{% static 'your_room/images/location_icon.png' %}" />
+        <p>{{ unit.location}}</p>
+      </div>
+      <div class="center-action">
+          {% if unit_type == 'hostel' and unit.is_booked %}
+          <button class="btn btn--lg" type="button" disabled>
+            Cannot Book
+          </button>
+          {% else %}
+          <button class="btn btn--lg" id="book-now" type="button" data-unit-type="{{ unit_type }}" data-unit-id="{{ unit.pk }}">
+          <!--Button carries the information of the unit type and pk being bought-->
+            Book Now
+          </button>
+          {% endif %}
+          {% csrf_token %}
+      </div>
+    </div>
+  </div>
+  <div class ="filters">
+    {% for unit in units %}
+    <article class="card">
+      {% with unit.images.first as img %}
+        {% if img %}
+            <img src="{{ img.image.url }}" alt="{{ unit.name }}" loading="lazy" />
+        {% else %}
+            <img src="{% static 'your_room/images/hero.png' %}" alt="{{ unit.name }}" loading="lazy" />
+        {% endif %}
+      {% endwith %}
+      {% if unit_type == 'airbnb' %} 
+      <div class="card_description">
+        <h3>{{ unit.name }}</h3>
+        <div class ="unit_specification_section">
+          <div class = "unit_specification">
+            <img src = "{% static 'your_room/images/location_icon.png' %}" />
+            <p>{{ unit.location}}</p>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      <div class="card__action"><a class="btn btn--sm" href="{% url 'unit-detail' 'airbnb' unit.pk %}">Details</a></div>
+    </article>
+    {% endfor %}
+  </div>
+  <div class="meta container">
     <div>{{ unit.price|floatformat:0|intcomma }} UGX</div>
     {% endif %}
   </div>

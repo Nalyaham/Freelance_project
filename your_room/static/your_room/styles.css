@@ -206,12 +206,71 @@ select.filter{
 
 
 /* ---------- Detail ---------- */
-.gallery{display:grid;gap:16px;padding-block:24px}
+.unit_slider_section{
+  display:flex;
+  flex-direction:column;
+}
+.unit{
+  position: relative; /* 1. Allows z-index to work */
+  z-index: 2;  
+  margin-top:-30px;
+  padding-left: 12px;
+  padding-top:24px;
+  background: white;
+  border-radius: 20px;
+  gap:5px; 
+}
+.unit h3{ font-size:clamp(1.125rem, 4vw, 1.25rem);font-weight:600;}
+.slider{
+  display:flex;
+  flex-direction:row;
+  overflow-x:auto;
+  gap:16px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  }
 @media(min-width:768px){.gallery{grid-template-columns:repeat(3,1fr)}}
-.gallery img{width:100%;height:288px;object-fit:cover;border-radius:var(--radius);background:var(--surface-gray)}
+.slider img{width:100%;height:480px;object-fit:cover;background:var(--surface-gray)}
+.slider::-webkit-scrollbar { display: none; }
+.slide {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+    scroll-snap-stop: always; /* forces a stop on EVERY slide, even a fast swipe */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 18px;
+  }
+.slider-wrapper{
+  position:relative;
+}
+.dots {
+    position: absolute;
+    top: 42px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    z-index: 1;
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.6);
+    transition: width 0.3s ease, background 0.3s ease;
+  }
+  .dot.active {
+    width: 22px;
+    background: #ffffff;
+  }
 .meta{display:flex; flex-wrap:wrap; gap:16px}
 @media(min-width:768px){.meta{grid-template-columns:repeat(3,1fr)}}
-.meta div{flex:0 1 auto; border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;font-size:1}
+.meta div{border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;font-size:1}
 .center-action{display:flex;justify-content:center;padding-block:32px}
 
 /* ---------- Footer ---------- */
