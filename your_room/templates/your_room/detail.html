@@ -97,7 +97,7 @@
   <div class ="other_places_scroll">
     {% for unit in units %}
     <article class="card other_places_card">
-      <a href="{% url 'unit-detail' 'airbnb' unit.pk %}">
+      <a href="{% url 'unit-detail' unit_type unit.pk %}">
         {% with unit.images.first as img %}
           {% if img %}
               <img src="{{ img.image.url }}" alt="{{ unit.name }}" loading="lazy" />
@@ -118,7 +118,7 @@
         <div class ="unit_specification_section">
           <div class = "unit_specification">
             <img src = "{% static 'your_room/images/location_icon.png' %}" />
-            <p>{{ unit.location}}</p>
+            <p>{% if unit_type == 'hostel' %}{{ unit.university }}{% else %}{{ unit.location }}{% endif %}</p>
           </div>
         </div>
         {% endif %}

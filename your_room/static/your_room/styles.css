@@ -290,7 +290,7 @@ select.filter{
 }
 .dots {
     position: absolute;
-    top: 42px;
+    bottom: 42px;
     left: 0;
     right: 0;
     display: flex;
@@ -302,12 +302,12 @@ select.filter{
     width: 8px;
     height: 8px;
     border-radius: 4px;
-    background: rgba(51, 51, 51, 0.7) ;
+    background: rgba(255, 255, 255, 0.6) ;
     transition: width 0.3s ease, background 0.3s ease;
   }
   .dot.active {
     width: 22px;
-    background: rgba(0, 0, 0, 0.6); 
+    background: #ffffff; 
   }
 .meta{display:flex; flex-wrap:wrap; gap:16px}
 @media(min-width:768px){.meta{grid-template-columns:repeat(3,1fr)}}
