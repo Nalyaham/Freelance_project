@@ -16,36 +16,6 @@
 <body>
 <main>
   <div class ="unit_slider_section">
-    <!--The if statements are to display the right information if the unit_type in the url is rental, hostel or airbnb-->
-    {% if unit_type == 'rental' %}
-    <div class="gallery container">
-    <!-- This for loop is used to display the image of each unit whose pk is proived in the url --> 
-    {% for img in unit.images.all %}
-    <img src="{{ img.image.url }}" alt="{{ unit.name }}" />
-    {% endfor %} 
-    </div>
-    <div>{{ unit.location }}</div>
-    <div>{% if unit.self_contained %} Self contained 
-      {% else %} Not self contained {% endif %}</div>
-    <div>{{ unit.price|floatformat:0|intcomma }} UGX</div>
-
-    {% elif unit_type == 'hostel' %}
-      {% if unit.is_booked == False %}
-      <div class="gallery container">
-      <!-- This for loop is used to display the image of each unit whose pk is proived in the url --> 
-      {% for img in unit.images.all %}
-      <img src="{{ img.image.url }}" alt="{{ unit.name }}" />
-      {% endfor %} 
-      </div>
-      <div>{{ unit.university }}</div>
-      <div>{{ unit.room_type|capfirst }}</div>
-      <div>{% if unit.self_contained %} Self contained {% else %} Not self contained {% endif %}</div>
-      <div>{{ unit.price|floatformat:0|intcomma }} UGX</div>
-      {% else %} 
-      <p>Hostel room is already booked.</p>
-      {% endif %}
-
-    {% else %}
     <div class="slider-wrapper">
       <div class="slider" id="slider">
         {% for img in unit.images.all %}
@@ -62,17 +32,38 @@
       <div><h3>{{ unit.name }}</h3></div>
       <div style="color:#f2b997;"><h3>{{ unit.price|floatformat:0|intcomma }} UGX</h3></div>
       
+      {% if unit_type == 'hotel' or unit_type == 'airbnb'%}
       <div class = "unit_specification">
         <img src = "{% static 'your_room/images/location_icon.png' %}" />
         <p>{{ unit.location}}</p>
       </div>
-      <div class="center-action">
+      {% elif unit_type == 'hostel' or unit_type == 'rental' %}
+      <div class ="unit_specification_section">
+        <div class = "unit_specification">
+          <img src = "{% static 'your_room/images/location_icon.png' %}" />
+          <p>{{ unit.location}}</p>
+        </div>
+        <div class = "unit_specification">
+          <img src = "{% static 'your_room/images/bed_icon.png' %}" />
+          <p>{{ unit.get_room_type_display }}</p>
+        </div>
+        <div class = "unit_specification">
+          <img src = "{% static 'your_room/images/bathroom_icon.png' %}" />
+          {% if unit.self_contained %}
+          <p>Self contained</p>
+          {% else %}
+          <p>Not self-contained</p>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+      <div class="center-action unit_center_action">
           {% if unit_type == 'hostel' and unit.is_booked %}
-          <button class="btn btn--lg" type="button" disabled>
+          <button class="btn btn--sm" type="button" disabled>
             Cannot Book
           </button>
           {% else %}
-          <button class="btn btn--lg" id="book-now" type="button" data-unit-type="{{ unit_type }}" data-unit-id="{{ unit.pk }}">
+          <button class="btn btn--sm" id="book-now" type="button" data-unit-type="{{ unit_type }}" data-unit-id="{{ unit.pk }}">
           <!--Button carries the information of the unit type and pk being bought-->
             Book Now
           </button>
@@ -81,7 +72,28 @@
       </div>
     </div>
   </div>
-  <h3 class ="unit">Other places</h3>
+  <div class="other_place_title">
+    <h3 class ="unit">Other {{ unit_type }}s</h3>
+    <div class="unit_specification">
+      {% if unit_type == 'rental'%}
+      <a href="{% url 'rentals' %}">
+        View all <img src="{% static 'your_room/images/right-arrow_.png' %}"/>
+      </a>
+      {% elif unit_type == 'hostel'%}
+      <a href="{% url 'hostels' %}">
+        View all <img src="{% static 'your_room/images/right-arrow_.png' %}"/>
+      </a>
+      {% elif unit_type == 'hotel'%}
+      <a href="{% url 'hotels' %}">
+        View all <img src="{% static 'your_room/images/right-arrow_.png' %}"/>
+      </a>
+      {% else %}
+      <a href="{% url 'airbnb' %}">
+        View all <img src="{% static 'your_room/images/right-arrow_.png' %}"/>
+      </a>
+      {% endif %}
+    </div>
+  </div>
   <div class ="other_places_scroll">
     {% for unit in units %}
     <article class="card other_places_card">
@@ -93,22 +105,28 @@
               <img src="{% static 'your_room/images/hero.png' %}" alt="{{ unit.name }}" loading="lazy" />
           {% endif %}
         {% endwith %}
-        {% if unit_type == 'airbnb' %} 
         <div class="card_description" style="padding-left: 10px;padding-right:16px;padding-bottom:10px;">
           <h3 style="font-size:1rem;">{{ unit.name }}</h3>
+        {% if unit_type == 'airbnb' or unit_type == 'hotel' %} 
           <div class ="unit_specification_section">
             <div class = "unit_specification">
               <img src = "{% static 'your_room/images/location_icon.png' %}" />
               <p>{{ unit.location}}</p>
             </div>
           </div>
+        {% else %}
+        <div class ="unit_specification_section">
+          <div class = "unit_specification">
+            <img src = "{% static 'your_room/images/location_icon.png' %}" />
+            <p>{{ unit.location}}</p>
+          </div>
         </div>
         {% endif %}
+        </div>
       </a>
     </article>
     {% endfor %}
   </div>
-    {% endif %}
   
     
 </main>
@@ -116,15 +134,19 @@
   <a class="logo" href="{% url 'index' %}"><b>Your</b><span>Room</span></a>
   <div class="col">
     <strong>Get a Room</strong>
-    <a href="{% url 'rentals' %}">Rentals</a>
-    <a href="{% url 'hostels' %}">Hostels</a>
-    <a href="{% url 'airbnb' %}">Air bnb</a>
-    <a href="{% url 'hotels' %}">Hotels</a>
+    <div class="footer_nav">
+      <a href="{% url 'rentals' %}">Rentals</a>
+      <a href="{% url 'hostels' %}">Hostels</a>
+      <a href="{% url 'airbnb' %}">Air bnb</a>
+      <a href="{% url 'hotels' %}">Hotels</a>
+    </div>
   </div>
   <div class="col">
     <strong>Contact us</strong>
-    <span>0764413127</span>
-    <span>getyourroom28@gmail.com</span>
+    <div class="footer_nav">
+      <span>0764413127</span>
+      <span>getyourroom28@gmail.com</span>
+    </div>
   </div>
 </footer>
 <script src="{% static 'your_room/script.js' %}"></script>

@@ -128,6 +128,20 @@ h1.page-title{font-size:clamp(1.375rem, 4vw, 2rem);font-weight:400;padding-top:3
   flex-direction:column;
   margin:0 10px;
 }
+.other_place_title{
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-right:10px;
+}
+.other_place_title .unit_specification{
+  padding-inline: 15px;
+  padding-block:5px;
+  border-radius: 20px;
+  color:#f2b997;
+}
+.other_place_title .unit_specification:hover{background:#63baab}
 .other_places_card{
   padding:0px;
   margin-inline:20px;
@@ -244,6 +258,10 @@ select.filter{
   gap:5px; 
 }
 .unit h3, { font-size:clamp(1.125rem, 4vw, 1.25rem);font-weight:600;}
+.unit_center_action{
+  margin-block:0px;
+  padding-block:0px;
+}
 .slider{
   display:flex;
   flex-direction:row;
