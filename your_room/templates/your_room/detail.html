@@ -58,7 +58,6 @@
         {% endfor %}
       </div>
     </div>
-    </div>
     <div class = "unit unit_slider_section">
       <div><h3>{{ unit.name }}</h3></div>
       <div style="color:#f2b997;"><h3>{{ unit.price|floatformat:0|intcomma }} UGX</h3></div>
@@ -82,9 +81,10 @@
       </div>
     </div>
   </div>
+  <h3 class ="unit">Other places</h3>
   <div class ="filters">
     {% for unit in units %}
-    <article class="card">
+    <article class="card other_places_card">
       {% with unit.images.first as img %}
         {% if img %}
             <img src="{{ img.image.url }}" alt="{{ unit.name }}" loading="lazy" />
