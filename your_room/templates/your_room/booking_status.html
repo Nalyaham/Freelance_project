@@ -4,18 +4,32 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Booking status | YourRoom</title>
+<title>Payment status | YourRoom</title>
 <link rel="stylesheet" href="{% static 'your_room/styles.css' %}" />
 </head>
 <body>
 <main>
-  <h1 class="page-title container">Booking Status</h1>
+  <h1 class="page-title container">Payment Status</h1>
 
   <section class="center container">
     {% if booking.status == "successful" %}
       <div class="center container">
-        <h2 class="section-title container">✅ Booking Confirmed</h2>
-        <p>Your payment went through!</p>
+        <img src ="{% static 'your_room/images/successful.png' %}"alt="" loading="lazy"/>
+        <p>Payment succesful</p>
+      </div>
+      <div class = "receipt-card center container">
+        <div class ="receipt-row">
+          <span class = "label">Name</span>
+          <span class = "value">{{booking.name}}</span>
+        </div>
+         <div class ="receipt-row">
+          <span class = "label">Phone number</span>
+          <span class = "value">{{booking.phone_number}}</span>
+        </div>
+        <div class ="receipt-row">
+          <span class = "label">Reference</span>
+          <span class = "value">{{ booking.reference }}</span>
+        </div>
       </div>
       <div class="meta container">
         <div><strong>Reference:</strong> {{ booking.reference }}</div>
