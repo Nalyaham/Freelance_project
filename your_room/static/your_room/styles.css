@@ -234,7 +234,8 @@ select.filter{
 
 
 /* ---------- Contact / feedback ---------- */
-.center{text-align:center;padding-block:32px}
+.center{text-align:center;padding-block:32px;}
+.center img{ width:66px; height:66px; margin: 0 auto;}
 .center p{font-size:1rem}
 @media(min-width:768px){.center p{font-size:1.2rem}}
 .channels{display:flex;flex-wrap:wrap;justify-content:center;gap:24px;margin-top:24px}
@@ -324,7 +325,7 @@ select.filter{
   border-radius:16px;
   padding:8px 20px;
   max-width:340px;
-  background:#fff;
+  background:#f2f1f1;
   margin: 0 auto; 
 }
 .receipt-row{
