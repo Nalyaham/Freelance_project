@@ -43,14 +43,14 @@
     <a class="card" href="{% url 'hotels' %}"><img src="{% static 'your_room/images/hotels.jpg' %}" alt="Hotels" /><h3>Hotels</h3></a>
   </div>
 
-  <h2 class = "section-title container">How to get a room</h2>
-  <section class = "center container">
+  <h2 class = "section-title container"style="background-color: #fff5ea;">How to get a room</h2>
+  <section class = "center container step_cards_spacing" style="background-color: #fff5ea;">
     <div class = "step_card">
       <img src ="{% static 'your_room/images/search_room_icon.png' %}"/>
       <div class ="step_text">
         <h3>Step 1</h3>
         <h4>Finding a Room:</h4>
-        <div class = "bulletin">
+        <div class = "step_text">
           <div class = "bullet">
             <img src = "{% static 'your_room/images/bullet.png' %}"/>
             <p>Type the name or location of your desired hostel, rental, hotel, or Airbnb in the search bar.</p>
@@ -63,69 +63,57 @@
       </div>
     </div>
     <div class = "step_card">
-      <img src ="{% static 'your_room/images/search_room_icon.png' %}"/>
       <div class ="step_text">
-        <h3>Step 1</h3>
-        <h4>Finding a Room:</h4>
+        <h3>Step 2</h3>
+        <h4>Narrow down your options:</h4>
         <div class = "bulletin">
           <div class = "bullet">
             <img src = "{% static 'your_room/images/bullet.png' %}"/>
-            <p>Type the name or location of your desired hostel, rental, hotel, or Airbnb in the search bar.</p>
+            <p>Use the filters to select your room based on location, university, single or double, self contained or by name.</p>
           </div>
+        </div>
+      </div>
+      <img src ="{% static 'your_room/images/room_filter_icon.png' %}"/>
+    </div>
+    <div class = "step_card">
+      <img src ="{% static 'your_room/images/details_icon.png' %}"/>
+      <div class ="step_text">
+        <h3>Step 3</h3>
+        <h4>View details of desired room:</h4>
+        <div class = "bulletin">
           <div class = "bullet">
             <img src = "{% static 'your_room/images/bullet.png' %}"/>
-            <p>Alternatively, you can click on the Hotels, Rentals, or Airbnbs cards to browse available units by category.</p>
+            <p>Click on “Details” button to obtain images and pricing of selected room.</p>
           </div>
         </div>
       </div>
     </div>
     <div class = "step_card">
-      <img src ="{% static 'your_room/images/search_room_icon.png' %}"/>
       <div class ="step_text">
-        <h3>Step 1</h3>
-        <h4>Finding a Room:</h4>
+        <h3>Step 4</h3>
+        <h4>Charges:</h4>
         <div class = "bulletin">
           <div class = "bullet">
             <img src = "{% static 'your_room/images/bullet.png' %}"/>
-            <p>Type the name or location of your desired hostel, rental, hotel, or Airbnb in the search bar.</p>
+            <p>Click on “Get Contact” button and fill in the required details (your name and phone number)</p>
           </div>
           <div class = "bullet">
             <img src = "{% static 'your_room/images/bullet.png' %}"/>
-            <p>Alternatively, you can click on the Hotels, Rentals, or Airbnbs cards to browse available units by category.</p>
+            <p>Follow the prompt on your phone where you will be charged 20,000 UGX.</p>
           </div>
         </div>
       </div>
+      <img src ="{% static 'your_room/images/money_icon.png' %}"/>
     </div>
     <div class = "step_card">
-      <img src ="{% static 'your_room/images/search_room_icon.png' %}"/>
+      <img src ="{% static 'your_room/images/contact_step_icon.png' %}"/>
       <div class ="step_text">
-        <h3>Step 1</h3>
-        <h4>Finding a Room:</h4>
+        <h3>Step 5</h3>
+        <h4>Contact of room:</h4>
         <div class = "bulletin">
           <div class = "bullet">
             <img src = "{% static 'your_room/images/bullet.png' %}"/>
-            <p>Type the name or location of your desired hostel, rental, hotel, or Airbnb in the search bar.</p>
-          </div>
-          <div class = "bullet">
-            <img src = "{% static 'your_room/images/bullet.png' %}"/>
-            <p>Alternatively, you can click on the Hotels, Rentals, or Airbnbs cards to browse available units by category.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class = "step_card">
-      <img src ="{% static 'your_room/images/search_room_icon.png' %}"/>
-      <div class ="step_text">
-        <h3>Step 1</h3>
-        <h4>Finding a Room:</h4>
-        <div class = "bulletin">
-          <div class = "bullet">
-            <img src = "{% static 'your_room/images/bullet.png' %}"/>
-            <p>Type the name or location of your desired hostel, rental, hotel, or Airbnb in the search bar.</p>
-          </div>
-          <div class = "bullet">
-            <img src = "{% static 'your_room/images/bullet.png' %}"/>
-            <p>Alternatively, you can click on the Hotels, Rentals, or Airbnbs cards to browse available units by category.</p>
+            <p>On successful payment, you will receive the contact details of the custodian or landlord.</p>
           </div>
         </div>
       </div>
