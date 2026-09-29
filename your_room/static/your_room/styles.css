@@ -128,18 +128,28 @@ h1.page-title{font-size:clamp(1.375rem, 4vw, 2rem);font-weight:400;padding-top:3
 .step_cards_spacing{
   display:flex;
   flex-direction:column;
-  gap:35px;
+  gap:45px;
+  padding-block:32px;
 }
 .step_card{
   display:flex;
   flex-direction:row;
   align-items:center;
-  justify-content: space-between;
+  justify-content: center;
   padding-inline:20px;
   gap:100px;
-}
+} 
 .step_card > img{
+  width: 50px;
+  height: 50px;
+  margin:0;
+  flex:none;
   filter: drop-shadow(var(--drop-shadow-lg)); 
+}
+@media(min-width:768px){
+  .step_card > img{width:66px;height:66px;}
+  .step_card .bullet p{width:350px;}
+  .step_cards_spacing{gap:80px}
 }
 
 .step_text{
@@ -155,6 +165,10 @@ h1.page-title{font-size:clamp(1.375rem, 4vw, 2rem);font-weight:400;padding-top:3
 .step_text h4{
   font-size:clamp(1rem, 4vw, 1.125rem);font-weight:400;
 }
+.step_card .bulletin{
+  display:flex;
+  flex-direction:column;
+}
 .step_card .bullet{
   display:flex;
   flex-direction:row;
@@ -163,7 +177,13 @@ h1.page-title{font-size:clamp(1.375rem, 4vw, 2rem);font-weight:400;padding-top:3
   gap:10px;
   padding-left:10px;
 }
-.step_card .bullet img{width:0.5rem;height:0.55rem;object-fit:contain;background:transparent}
+.step_card .bullet img{
+  width:0.5rem;
+  height:0.55rem;
+  margin:0;          /* cancels the inherited margin: 0 auto from .center img */
+  flex:none; 
+  object-fit:contain;
+  background:transparent}
 .step_card .bullet p{
   font-size:clamp(0.6rem, 4vw, 0.675rem)
 }
