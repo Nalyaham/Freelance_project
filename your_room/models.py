@@ -26,6 +26,11 @@ class RoomType(models.TextChoices):
 class BaseUnit(models.Model):
     name = models.CharField(max_length=150)
     location = models.CharField(max_length=150)
+    description = models.TextField(
+        blank=True,
+        max_length=2000,
+        help_text="Describe the unit: facilities, rules, nearby places, etc.",
+    )
 
     # This makes django not to make a separate table for the base unit
     # It also orders results by location
