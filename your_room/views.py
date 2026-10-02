@@ -62,7 +62,7 @@ def rental(request):
 # If the link has a unit type equal to the model in the dictionary, detail will only display that list
 def unit_detail(request,unit_type, pk): 
     model = UNIT_MODELS.get(unit_type)
-    unit = get_object_or_404(model.objects.prefetch_related("images"), pk=pk)
+    unit = get_object_or_404(model.objects.prefetch_related("images", "videos"), pk=pk)
     units = model.objects.exclude(pk=pk).prefetch_related("images")[:5]
     return render(request, "your_room/detail.html", {"unit": unit, "unit_type": unit_type, "units":units})
 

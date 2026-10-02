@@ -16,6 +16,7 @@ Design notes:
 
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.core.validators import FileExtensionValidator
 
 
 class RoomType(models.TextChoices):
@@ -104,6 +105,37 @@ class HostelImage(UnitImageBase):
 
 class HotelImage(UnitImageBase):
     unit = models.ForeignKey(Hotel, related_name="images", on_delete=models.CASCADE)
+
+def validate_video_size(f):
+    if f.size > 30 * 1024 * 1024:
+        raise ValidationError("Video must be under 30MB.")
+
+
+class UnitVideoBase(models.Model):
+    video = models.FileField(
+        upload_to="unit_videos/%Y/%m/",
+        validators=[
+            FileExtensionValidator(["mp4", "webm", "mov"]),
+            validate_video_size,
+        ],
+        help_text="MP4 recommended, under 30MB, ideally 30-60 seconds.",
+    )
+
+    class Meta:
+        abstract = True
+
+
+class RentalVideo(UnitVideoBase):
+    unit = models.ForeignKey(Rental, related_name="videos", on_delete=models.CASCADE)
+
+class AirbnbVideo(UnitVideoBase):
+    unit = models.ForeignKey(Airbnb, related_name="videos", on_delete=models.CASCADE)
+
+class HostelVideo(UnitVideoBase):
+    unit = models.ForeignKey(Hostel, related_name="videos", on_delete=models.CASCADE)
+
+class HotelVideo(UnitVideoBase):
+    unit = models.ForeignKey(Hotel, related_name="videos", on_delete=models.CASCADE)
 
 # Feedback Model
 class Feedback(models.Model):
