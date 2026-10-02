@@ -125,15 +125,31 @@ USE_TZ = True
 STATIC_URL = "/static/"
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+USE_R2 = os.environ.get("USE_R2") == "1"
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
+}
 
 MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR
+MEDIA_ROOT = BASE_DIR / "media"
+
+if USE_R2:
+    INSTALLED_APPS += ["storages"]
+
+    AWS_ACCESS_KEY_ID = os.environ["R2_ACCESS_KEY_ID"]
+    AWS_SECRET_ACCESS_KEY = os.environ["R2_SECRET_ACCESS_KEY"]
+    AWS_STORAGE_BUCKET_NAME = os.environ["R2_BUCKET_NAME"]
+    AWS_S3_ENDPOINT_URL = f"https://{os.environ['R2_ACCOUNT_ID']}.r2.cloudflarestorage.com"
+    AWS_S3_CUSTOM_DOMAIN = os.environ["R2_PUBLIC_DOMAIN"]  # e.g. pub-xxxx.r2.dev (no https://)
+    AWS_S3_REGION_NAME = "auto"
+    AWS_S3_SIGNATURE_VERSION = "s3v4"
+    AWS_QUERYSTRING_AUTH = False
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_DEFAULT_ACL = None
+
+    STORAGES["default"] = {"BACKEND": "storages.backends.s3.S3Storage"}
 
 NYLONPAY_API_KEY = os.environ.get("NYLONPAY_API_KEY")
 NYLONPAY_API_SECRET = os.environ.get("NYLONPAY_API_SECRET")

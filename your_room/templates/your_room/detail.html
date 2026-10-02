@@ -31,7 +31,7 @@
     <div class = "unit unit_slider_section">
       <div><h3>{{ unit.name }}</h3></div>
       <div style="color:#f2b997;"><h3>{{ unit.price|floatformat:0|intcomma }} UGX</h3></div>
-      
+      <div><h3>{{ unit.description }}</h3></div>
       {% if unit_type == 'hotel' or unit_type == 'airbnb'%}
       <div class = "unit_specification">
         <img src = "{% static 'your_room/images/location_icon.png' %}" />
