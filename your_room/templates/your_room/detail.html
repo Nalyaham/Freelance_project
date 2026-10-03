@@ -36,18 +36,6 @@
         <img src = "{% static 'your_room/images/location_icon.png' %}" />
         <p>{{ unit.location}}</p>
       </div>
-      {% with cover=unit.images.all|first %}
-        {% for v in unit.videos.all %}
-        <div class="unit_video">
-          <div class = "description">
-            <h3 class ="unit">Description</h3>
-          </div>
-          <video controls preload="metadata" playsinline
-                {% if cover %}poster="{{ cover.image.url }}"{% endif %}
-                src="{{ v.video.url }}"></video>
-        </div>
-        {% endfor %}
-      {% endwith %}
       {% elif unit_type == 'hostel' or unit_type == 'rental' %}
       <div class ="unit_specification_section">
         <div class = "unit_specification">
@@ -68,6 +56,19 @@
         </div>
       </div>
       {% endif %}
+    {% with cover=unit.images.all|first %}
+      {% for v in unit.videos.all %}
+      <div class="unit_video">
+        <div class = "description">
+          <h3>Description</h3>
+          <p class = "unit_specification">{{ unit.description }}</p>
+        </div>
+        <video controls preload="metadata" playsinline
+              {% if cover %}poster="{{ cover.image.url }}"{% endif %}
+              src="{{ v.video.url }}"></video>
+      </div>
+      {% endfor %}
+    {% endwith %}
       <div class="center-action unit_center_action">
           {% if unit_type == 'hostel' and unit.is_booked %}
           <button class="btn btn--sm" type="button" disabled>
