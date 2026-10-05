@@ -411,7 +411,7 @@ select.filter{
   border:1px solid var(--border);
 }
 .description h3{font-size:clamp(1.125rem, 4vw, 1.25rem);font-weight:600; padding-top:12px;}
-.description p{font-size:clamp(0.85rem, 4vw, 0.875rem)}
+.description p{font-size:clamp(0.8rem, 2vw, 0.85rem); font-weight:200;}
 @media(min-width:768px){
   .unit_video{grid-template-columns:repeat(2, minmax(0, 1fr));}
   .unit_video video{width:60%;height:75%;}

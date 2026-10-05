@@ -61,7 +61,7 @@
       <div class="unit_video">
         <div class = "description">
           <h3>Description</h3>
-          <p class = "unit_specification">{{ unit.description }}</p>
+          <p>{{ unit.description }}</p>
         </div>
         <video controls preload="metadata" playsinline
               {% if cover %}poster="{{ cover.image.url }}"{% endif %}

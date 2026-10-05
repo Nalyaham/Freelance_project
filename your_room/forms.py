@@ -62,7 +62,7 @@ def image_formset(cfg):
         cfg["image"],
         formset=ImageFormSet,
         fields=["image", "is_main"],
-        extra=3,
+        extra=MAX_IMAGES,
         max_num=MAX_IMAGES,
         validate_max=True,
         can_delete=True,
