@@ -23,6 +23,24 @@ UNIT_MODELS = { 'rental' : Rental,
                'airbnb' : Airbnb,
                'hotel' : Hotel}
 
+def unique_values(model, field):
+    """
+    Obtains the values in a field of the specific model, trims the values, saves the distinct
+    values of that field sorted and lower case
+
+    Args:
+        model: string of the model
+        field: string of the field 
+    
+    Return:
+        dictionary: a sorted dictionary of unique values of the field in lowercase
+    """
+    seen = {}
+    for value in model.objects.order_by().values_list(field, flat=True):
+        value = (value or "").strip()
+        if value and value.lower() not in seen:
+            seen[value.lower()] = value
+    return sorted(seen.values(), key=str.lower)
 
 def index(request):
     rental_location = Rental.objects.values_list("location", flat=True).distinct()
@@ -53,7 +71,7 @@ def rental(request):
     context = {
         "units": units,
         # feeds the location dropdown with whatever locations actually exist
-        "locations": Rental.objects.values_list("location", flat=True).distinct(),
+        "locations": unique_values(Rental, "location")
     }
     return render(request, "your_room/rentals.html", context)
 
@@ -83,7 +101,7 @@ def hostel(request):
     context = {
         "units": units,
         # feeds the location dropdown with whatever locations actually exist
-        "universities": Hostel.objects.values_list("university", flat=True).distinct(),
+        "universities": unique_values(Hostel, "university")
     }
     return render(request, "your_room/hostels.html", context)
 
@@ -98,7 +116,7 @@ def airbnb(request):
     if name: 
         units = units.filter(name__icontains = name)
 
-    context = { "locations" : Airbnb.objects.values_list("location", flat=True).distinct(), 
+    context = { "locations" : unique_values(Airbnb, "location"), 
                "names" : Airbnb.objects.values_list("name", flat=True).distinct(),
                "units": units}
     
@@ -115,7 +133,7 @@ def hotel(request):
     if name: 
         units = units.filter(name__icontains = name)
 
-    context = { "locations" : Hotel.objects.values_list("location", flat=True).distinct(), 
+    context = { "locations" : unique_values(Hotel, "location"), 
                 "names" : Hotel.objects.values_list("name", flat=True).distinct(),
                 "units": units}
     
