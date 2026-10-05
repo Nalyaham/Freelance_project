@@ -1,0 +1,20 @@
+{% extends "your_room/dashboard/base.html" %}
+{% block title %}Overview{% endblock %}
+{% block content %}
+<h1 class="page-title container">Dashboard</h1>
+<h2 class="section-title container">What would you like to manage?</h2>
+<div class="grid container dash-cards">
+  {% for c in cards %}
+  <article class="card">
+    <div class="card_description">
+      <h3>{{ c.plural }}</h3>
+      <p>{{ c.count }} in the database</p>
+    </div>
+    <div class="card__action">
+      <a class="btn btn--sm" href="{% url 'dash-list' c.key %}">Manage</a>
+      <a class="btn btn--sm btn--ghost" href="{% url 'dash-add' c.key %}">Add new</a>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{% endblock %}

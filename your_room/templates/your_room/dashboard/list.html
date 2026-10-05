@@ -1,0 +1,75 @@
+{% extends "your_room/dashboard/base.html" %}
+{% block title %}{{ cfg.plural }}{% endblock %}
+{% block content %}
+<h1 class="page-title container">{{ cfg.plural }}</h1>
+<div class="dash container">
+
+  <div class="dash-toolbar">
+    <form method="get" class="dash-search" role="search">
+      <input type="search" name="q" value="{{ q }}" placeholder="Search {{ cfg.plural|lower }}…" aria-label="Search {{ cfg.plural|lower }}" />
+      <button class="btn btn--sm" type="submit">Search</button>
+    </form>
+    <a class="btn btn--sm" href="{% url 'dash-add' unit_type %}">Add {{ cfg.label|lower }}</a>
+  </div>
+
+  <p class="dash-hint">
+    {{ page_obj.paginator.count }} {{ cfg.plural|lower }}{% if q %} matching “{{ q }}”{% endif %}.
+    Edit any cell below, then choose <b>Save changes</b>. Use <b>Photos &amp; video</b> to manage media.
+  </p>
+
+  <form method="post" action="{{ request.get_full_path }}" id="list-form">
+    {% csrf_token %}
+    {{ formset.management_form }}
+    {{ formset.non_form_errors }}
+
+    <div class="dash-table-wrap">
+      <table class="dash-table">
+        <thead>
+          <tr>
+            <th>Photo</th>
+            {% for label in labels %}<th>{{ label }}</th>{% endfor %}
+            <th>Delete</th>
+            <th>Media</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for form in formset %}
+          <tr>
+            <td>
+              {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+              {% with img=form.instance.images.all|first %}
+                {% if img %}<img class="dash-thumb" src="{{ img.image.url }}" alt="" loading="lazy" />{% else %}<span class="dash-thumb is-empty"></span>{% endif %}
+              {% endwith %}
+            </td>
+            {% for field in form.visible_fields %}{% if field.name != "DELETE" %}
+            <td>{{ field }}{{ field.errors }}</td>
+            {% endif %}{% endfor %}
+            <td class="dash-center">{{ form.DELETE }}</td>
+            <td><a class="dash-link" href="{% url 'dash-edit' unit_type form.instance.pk %}">Photos &amp; video</a></td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="{{ labels|length|add:3 }}" class="dash-empty">
+            No {{ cfg.plural|lower }} found. Choose <b>Add {{ cfg.label|lower }}</b> to create the first one.
+          </td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    {% if formset.forms %}
+    <div class="dash-savebar">
+      <button class="btn btn--sm" type="submit">Save changes</button>
+      <span>Only rows you changed are saved.</span>
+    </div>
+    {% endif %}
+  </form>
+
+  {% if page_obj.has_other_pages %}
+  <nav class="dash-pager" aria-label="Pages">
+    {% if page_obj.has_previous %}<a class="btn btn--sm btn--ghost" href="?page={{ page_obj.previous_page_number }}{% if q %}&amp;q={{ q|urlencode }}{% endif %}">Previous</a>{% endif %}
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}<a class="btn btn--sm btn--ghost" href="?page={{ page_obj.next_page_number }}{% if q %}&amp;q={{ q|urlencode }}{% endif %}">Next</a>{% endif %}
+  </nav>
+  {% endif %}
+</div>
+{% endblock %}

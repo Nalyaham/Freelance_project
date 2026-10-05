@@ -1,0 +1,16 @@
+{% extends "your_room/dashboard/base.html" %}
+{% block title %}Log in{% endblock %}
+{% block content %}
+<h1 class="page-title container">Staff log in</h1>
+<section class="center container">
+  <p>Log in with your staff account to manage units.</p>
+  <form method="post" class="feedback">
+    {% csrf_token %}
+    {% if form.errors %}<p class="dash-msg error">That username and password don’t match. Check them and try again.</p>{% endif %}
+    <input type="text" name="username" placeholder="Username" required autofocus autocomplete="username" />
+    <input type="password" name="password" placeholder="Password" required autocomplete="current-password" />
+    <input type="hidden" name="next" value="{{ next }}" />
+    <button class="btn btn--sm" type="submit">Log in</button>
+  </form>
+</section>
+{% endblock %}

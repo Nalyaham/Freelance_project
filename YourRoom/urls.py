@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from your_room.views import index, rental, unit_detail, hostel, airbnb, search, book_now, submit_feedback, hotel
 from django.conf import settings
 from django.conf.urls.static import static
@@ -30,7 +30,8 @@ urlpatterns = [
     path("hotels/", hotel, name = "hotels"),
     path("search/", search, name = "search"),
     path("feedback/", submit_feedback, name="submit-feedback"),
-    path("book/<str:unit_type>/<int:pk>/", book_now, name="book-now")
+    path("book/<str:unit_type>/<int:pk>/", book_now, name="book-now"),
+    path("dashboard/", include("your_room.dashboard_urls"))
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

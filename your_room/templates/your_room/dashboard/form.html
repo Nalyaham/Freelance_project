@@ -1,0 +1,60 @@
+{% extends "your_room/dashboard/base.html" %}
+{% block title %}{% if obj %}Edit {{ obj.name }}{% else %}Add {{ cfg.label|lower }}{% endif %}{% endblock %}
+{% block content %}
+<h1 class="page-title container">{% if obj %}Edit {{ obj.name }}{% else %}Add {{ cfg.label|lower }}{% endif %}</h1>
+<div class="dash container">
+  <form method="post" enctype="multipart/form-data" class="dash-form">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <h2>Details</h2>
+    <div class="dash-grid">
+      {% for field in form %}
+      <div class="dash-field{% if field.name == 'description' %} is-wide{% endif %}">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+        {{ field.errors }}
+      </div>
+      {% endfor %}
+    </div>
+
+    <h2>Photos</h2>
+    <p class="dash-hint">Up to {{ max_images }} photos. Tick <b>Main photo</b> on the one shown first on cards.</p>
+    {{ images.management_form }}
+    {{ images.non_form_errors }}
+    <div class="dash-media">
+      {% for f in images %}
+      <div class="dash-media-item">
+        {% for hidden in f.hidden_fields %}{{ hidden }}{% endfor %}
+        {% if f.instance.pk %}<img src="{{ f.instance.image.url }}" alt="" loading="lazy" />{% endif %}
+        {{ f.image }}{{ f.image.errors }}
+        <label class="dash-check">{{ f.is_main }} Main photo</label>
+        {% if f.instance.pk %}<label class="dash-check">{{ f.DELETE }} Delete this photo</label>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+
+    <h2>Video</h2>
+    <p class="dash-hint">One short clip, MP4 recommended, under 30 MB. To replace it, choose a new file.</p>
+    {{ videos.management_form }}
+    {{ videos.non_form_errors }}
+    <div class="dash-media">
+      {% for f in videos %}
+      <div class="dash-media-item">
+        {% for hidden in f.hidden_fields %}{{ hidden }}{% endfor %}
+        {% if f.instance.pk %}<video src="{{ f.instance.video.url }}" controls preload="metadata" playsinline></video>{% endif %}
+        {{ f.video }}{{ f.video.errors }}
+        {% if f.instance.pk %}<label class="dash-check">{{ f.DELETE }} Delete this video</label>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="dash-savebar">
+      <button class="btn btn--sm" type="submit">{% if obj %}Save changes{% else %}Add {{ cfg.label|lower }}{% endif %}</button>
+      <a class="btn btn--sm btn--ghost" href="{% url 'dash-list' unit_type %}">Cancel</a>
+      {% if obj %}<a class="btn btn--sm btn--danger" href="{% url 'dash-delete' unit_type obj.pk %}">Delete {{ cfg.label|lower }}</a>{% endif %}
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "your_room/dashboard/base.html" %}
+{% block title %}Delete {{ obj.name }}{% endblock %}
+{% block content %}
+<h1 class="page-title container">Delete {{ cfg.label|lower }}</h1>
+<div class="dash container">
+  <div class="dash-panel">
+    <p>Delete <b>{{ obj.name }}</b>? This also removes its {{ n_images }} photo{{ n_images|pluralize }} and {{ n_videos }} video{{ n_videos|pluralize }}. This can’t be undone.</p>
+    <form method="post" class="dash-savebar">
+      {% csrf_token %}
+      <button class="btn btn--sm btn--danger" type="submit">Delete {{ cfg.label|lower }}</button>
+      <a class="btn btn--sm btn--ghost" href="{% url 'dash-edit' unit_type obj.pk %}">Keep it</a>
+    </form>
+  </div>
+</div>
+{% endblock %}
