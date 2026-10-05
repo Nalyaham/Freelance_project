@@ -1,6 +1,6 @@
 
 from your_room.models import Rental, Hostel, Airbnb, Feedback, Booking, Hotel
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from django.http import JsonResponse
 from django.conf import settings
@@ -123,9 +123,11 @@ def hotel(request):
 
 def search(request):
     q = request.GET.get("q", "").strip()
+    if not q:
+        return redirect("index")
     words = q.split()
 
-    rentals = hostels = airbnbs = []
+    rentals = hostels = airbnbs = hotels = []
 
     if words:
         rental_filter = Q()
