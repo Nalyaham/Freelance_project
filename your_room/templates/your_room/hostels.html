@@ -48,8 +48,12 @@
           {% endif %}
         {% endwith %}
         <div class="card_description">
-          <h3>{{ unit.university }}</h3>
+          <h3>{{ unit.name }}</h3>
           <div class ="unit_specification_section">
+            <div class = "unit_specification">
+              <img src = "{% static 'your_room/images/location_icon.png' %}" />
+              <p>{{ unit.university}}</p>
+            </div>
             <div class = "unit_specification">
               <img src = "{% static 'your_room/images/bed_icon.png' %}" />
               <p>{{ unit.room_type|capfirst }}</p>
