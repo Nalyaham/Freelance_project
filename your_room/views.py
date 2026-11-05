@@ -7,16 +7,16 @@ from django.conf import settings
 import uuid
 from nylonpay import create_nylon_pay
 from nylonpay import SdkException
-import json
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.cache import cache
-from nylonpay import create_nylon_pay
 import json
 import os
-import json
 from django.http import JsonResponse, HttpResponse
 import secrets
+import logging
+
+logger = logging.getLogger(__name__)
 
 UNIT_MODELS = { 'rental' : Rental, 
                'hostel' : Hostel, 
@@ -184,7 +184,8 @@ def search(request):
 
 nylonpay = create_nylon_pay(
     api_key=settings.NYLONPAY_API_KEY,
-    api_secret=settings.NYLONPAY_API_SECRET
+    api_secret=settings.NYLONPAY_API_SECRET, 
+    base_url="https://api.nylonpay.com/api/services"
 )
 
 def book_now(request, unit_type, pk):
@@ -210,7 +211,7 @@ def book_now(request, unit_type, pk):
 
     try:
         result = nylonpay.collect_payment_and_resolve(
-            amount=int(unit.price),
+            amount=int(unit.charge),
             currency="UGX",
             customer={"name": name, "phone_number": phone},
             description=f"Booking: {unit.name}",
@@ -224,7 +225,7 @@ def book_now(request, unit_type, pk):
     if result.is_ok:
         tx = result.value
         booking["status"] = tx.status
-        booking["reference"] = tx.reference
+        booking["reference"] = tx.reference 
         if tx.status == "failed":
             booking["failure_reason"] = tx.failure_reason
         elif tx.status == "successful" and unit_type == "hostel":
